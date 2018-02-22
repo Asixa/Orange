@@ -1,0 +1,14 @@
+#<system>;
+
+public class Program
+{
+	void Main()
+	{
+		int a;
+		while(a<100)
+		{
+			a=a+1;
+			print("H"+"E"+"L"+"L"+"O")
+		}
+	}
+}
