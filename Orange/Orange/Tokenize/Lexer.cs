@@ -221,11 +221,11 @@ namespace Orange.Tokenize
             Reserve(new Word("class",Tag.CLASS));
             Reserve(Word.True);
             Reserve(Word.False);
-            Reserve(Parse.Type.Int);
-            Reserve(Parse.Type.Char);
-            Reserve(Parse.Type.Bool);
-            Reserve(Parse.Type.Float);
-            Reserve(Parse.Type.String);
+            Reserve(Type.Int);
+            Reserve(Type.Char);
+            Reserve(Type.Bool);
+            Reserve(Type.Float);
+            Reserve(Type.String);
         }
     }
 }

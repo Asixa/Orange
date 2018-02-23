@@ -89,35 +89,7 @@ namespace Orange.Parse.Core
                     Console.WriteLine(_look.TagValue);
                     Error("syntax error");
                 }
-            } while (_look.TagValue == '#')  //D -> type ID
-            {
-                Match('#');
-                if (_look.TagValue == '<')
-                {
-                    Match('<');
-                    var tok = _look;
-                    string _namespace = "";
-                    Match(Tag.ID);
-                    _namespace += tok.ToString();
-
-                    while (_look.TagValue == '.')
-                    {
-                        Match('.');
-                        _namespace += ".";
-                        tok = _look;
-                        Match(Tag.ID);
-                        _namespace += tok.ToString();
-                    }
-
-                    Match('>');
-                    snippet.include.Add(new Quote(_namespace));
-                }
-                else
-                {
-                    Console.WriteLine(_look.TagValue);
-                    Error("syntax error");
-                }
-            }
+            } 
         }
     }
 }
