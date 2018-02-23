@@ -5,7 +5,6 @@ namespace MSIL_Lab
     {
         static void Main(string[] args)
         {
-            Console.Title = "Orange-HelloWorld";
             Print("HelloWorld");
         }
 
