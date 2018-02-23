@@ -3,6 +3,169 @@ using Orange.Tokenize;
 
 namespace Orange
 {
+    public class ExprC:Stmt
+    {
+        
+        public static  Expr Bool()
+        {
+            var expr = Join();
+            while (_look.TagValue == Tag.OR)
+            {
+                Move();
+                expr = new Or(expr, Join());
+            }
+            return expr;
+        }
+
+        public static Expr Join()
+        {
+            var expr = Equality();
+            while (_look.TagValue == Tag.AND)
+            {
+                Move();
+                expr = new And(expr, Equality());
+            }
+            return expr;
+        }
+
+        public static Expr Equality()
+        {
+            var expr = Rel();
+            while (_look.TagValue == Tag.EQ || _look.TagValue == Tag.NE)
+            {
+                var tok = _look;
+                Move();
+                expr = new Rel(tok, expr, Rel());
+            }
+            return expr;
+        }
+
+        public static Expr Rel()
+        {
+            var expr = Expr();
+            if ('<' != _look.TagValue && Tag.LE != _look.TagValue && Tag.GE != _look.TagValue &&
+                '>' != _look.TagValue) return expr;
+            var tok = _look;
+            Move();
+            return new Rel(tok, expr, Expr());
+        }
+
+        public static Expr Expr()
+        {
+            var expr = Term();
+            while (_look.TagValue == '+' || _look.TagValue == '-')
+            {
+                var tok = _look;
+                Move();
+                expr = new Arith(tok, expr, Term());
+            }
+            return expr;
+        }
+
+        public static Expr Term()
+        {
+            var expr = Unary();
+            while (_look.TagValue == '*' || _look.TagValue == '/')
+            {
+                var tok = _look;
+                Move();
+                expr = new Arith(tok, expr, Unary());
+            }
+            return expr;
+        }
+
+        public static Expr Unary()
+        {
+            switch (_look.TagValue)
+            {
+                case '-':
+                    Move();
+                    return new Unary(Word.minus, Unary());
+                case '!':
+                    Move();
+                    return new Not(Unary());
+                default:
+                    return Factor();
+            }
+        }
+
+        public static Expr Factor()
+        {
+            Expr expr = null;
+            switch (_look.TagValue)
+            {
+                case '(':
+                    Move();
+                    expr = Bool();
+                    Match(')');
+                    return expr;
+
+                case Tag.NUM:
+                    expr = new Constant(_look, Parse.Type.Int);
+                    Move();
+                    return expr;
+
+                case Tag.REAL:
+                    expr = new Constant(_look, Parse.Type.Float);
+                    Move();
+                    return expr;
+
+                case Tag.TRUE:
+                    expr = Constant.True;
+                    Move();
+                    return expr;
+
+                case Tag.FALSE:
+                    expr = Constant.False;
+                    Move();
+                    return expr;
+                case Tag.STRING:
+                    expr = new Constant(_look, Parse.Type.String);
+                    Move();
+                    return expr;
+                default:
+                    Error("syntax error");
+                    return expr;
+
+                case Tag.ID:
+                    var s = _look.ToString();
+                    var id = Top.Get(_look);
+                    if (id == null)
+                        Error(_look + " undeclared");
+                    Move();
+                    if (_look.TagValue != '[')
+                        return id;
+                    else
+                        return Offset(id);
+            }
+        }
+
+        public static Access Offset(Id a)
+        {
+            Expr i, w, t1, t2, loc;
+            var type = a.Type;
+            Match('[');
+            i = Bool();
+            Match(']');
+            type = (type as Array).Of;
+            w = new Constant(type.Width);
+            t1 = new Arith(new Token('*'), i, w);
+            loc = t1;
+            while (_look.TagValue == '[')
+            {
+                Match('[');
+                i = Bool();
+                Match(']');
+                type = (type as Array).Of;
+                w = new Constant(type.Width);
+                t1 = new Arith(new Token('*'), i, w);
+                t2 = new Arith(new Token('+'), loc, t1);
+                loc = t2;
+            }
+            return new Access(a, loc, type);
+        }
+    }
+
     public class Expr : Node
     {
         public Token Op { get; set; }
@@ -54,6 +217,7 @@ namespace Orange
         {
             return Op.ToString();
         }
+
     }
 
     public class Id : Expr

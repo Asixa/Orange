@@ -5,8 +5,8 @@ public class Program
 {
 	Object Main()
 	{
-		Title("Orange-HelloWorld");
+		//Title("Orange-HelloWorld");
 		print("HelloWorld");
-		Console.Readkey();
+		//Console.Readkey();
 	}
 }

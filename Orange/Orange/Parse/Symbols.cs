@@ -27,7 +27,6 @@ namespace Orange.Parse
         }
     }
 
-
     public class Type : Word
     {
         public int Width;
@@ -62,6 +61,61 @@ namespace Orange.Parse
            
             return Char;
         }
+
+        public static Type Match()
+        {
+            Type type = null;
+            if (Stmt._look.TagValue == Tag.BASIC)
+            {
+                type = Stmt._look as Type; //expect _look.tag == Tag.Basic
+                Stmt.Match(Tag.BASIC);
+            }
+            else if (Stmt._look.TagValue == Tag.ID)
+            {
+
+                var word = Stmt._look as Word;
+                if (Stmt.snippet.types.Contains(word.ToString()))
+                {
+                    type = new Type(word.Lexeme, Tag.ID, 4);
+                }
+                else
+                {
+                    Error("未知的类型");
+                }
+                Stmt.Match(Tag.ID);
+            }
+            return Stmt._look.TagValue != '[' ? type : Dimension(type);
+        }
+        public static Type ComplexType()
+        {
+            Type t = null;
+            string id = "";
+            id += Stmt._look.ToString();
+            Stmt.Match(Tag.ID);
+            while (Stmt._look.TagValue == '.')
+            {
+                Stmt.Match('.');
+                id += Stmt._look.ToString();
+                Stmt.Match(Tag.ID);
+            }
+            t = new Type(id, Tag.ID, 4);
+            return Stmt._look.TagValue != '[' ? t : Dimension(t);
+        }
+
+        public static Type Dimension(Type type)
+        {
+            Stmt.Match('[');
+            var tok = Stmt._look;
+            Stmt.Match(Tag.NUM);
+            Stmt.Match(']');
+
+            if (Stmt._look.TagValue == '[')
+                type = Dimension(type);
+
+            return new Array(((Int)tok).Value, type);
+        }
+
+        public static void Error(string msg) => Debug.Debugger.Error("[ERROR] line " + Lexer.Line + ": " + msg);
     }
 
     public class Array : Type

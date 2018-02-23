@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
+using Orange.Tokenize;
 
 namespace Orange.Parse.Core
 {
-    public class Quote
+    public class Quote:Stmt
     {
         public string name;
         public Quote(string name)
@@ -55,6 +57,67 @@ namespace Orange.Parse.Core
             }
             list.Add(nameSpace);
             return list;
+        }
+
+        public new static void Match()
+        {
+            while (_look.TagValue == '#') 
+            {
+                Match('#');
+                if (_look.TagValue == '<')
+                {
+                    Match('<');
+                    var tok = _look;
+                    string _namespace = "";
+                    Match(Tag.ID);
+                    _namespace += tok.ToString();
+
+                    while (_look.TagValue == '.')
+                    {
+                        Match('.');
+                        _namespace += ".";
+                        tok = _look;
+                        Match(Tag.ID);
+                        _namespace += tok.ToString();
+                    }
+
+                    Match('>');
+                    snippet.include.Add(new Quote(_namespace));
+                }
+                else
+                {
+                    Console.WriteLine(_look.TagValue);
+                    Error("syntax error");
+                }
+            } while (_look.TagValue == '#')  //D -> type ID
+            {
+                Match('#');
+                if (_look.TagValue == '<')
+                {
+                    Match('<');
+                    var tok = _look;
+                    string _namespace = "";
+                    Match(Tag.ID);
+                    _namespace += tok.ToString();
+
+                    while (_look.TagValue == '.')
+                    {
+                        Match('.');
+                        _namespace += ".";
+                        tok = _look;
+                        Match(Tag.ID);
+                        _namespace += tok.ToString();
+                    }
+
+                    Match('>');
+                    snippet.include.Add(new Quote(_namespace));
+                }
+                else
+                {
+                    Console.WriteLine(_look.TagValue);
+                    Error("syntax error");
+                }
+            }
         }
     }
 }

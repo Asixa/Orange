@@ -50,10 +50,12 @@
     <Compile Include="Parse\Core\Method.cs" />
     <Compile Include="Parse\Core\Quote.cs" />
     <Compile Include="Parse\Snippet.cs" />
+    <Compile Include="Parse\Statements\Block.cs" />
     <Compile Include="Parse\Statements\Break.cs" />
     <Compile Include="Parse\Statements\Do.cs" />
     <Compile Include="Parse\Statements\FuncCall.cs" />
     <Compile Include="Parse\Statements\FuncParamsDecla.cs" />
+    <Compile Include="Parse\Statements\IDOper.cs" />
     <Compile Include="Parse\Statements\If.cs" />
     <Compile Include="Parse\Statements\IfElse.cs" />
     <Compile Include="Parse\Statements\Print.cs" />
@@ -77,9 +79,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Parse\Expressions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

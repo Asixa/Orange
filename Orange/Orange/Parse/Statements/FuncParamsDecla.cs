@@ -1,14 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Orange.Tokenize;
 
 namespace Orange.Parse.Statements
 {
-    public class FuncParamsDecla
+    public class FuncParamsDecla:Stmt
     {
         public List<Param> _params=new List<Param>();
+
+        public new static FuncParamsDecla Match()
+        {
+            FuncParamsDecla p = new FuncParamsDecla();
+            Match('(');
+            while (_look.TagValue == ',')
+            {
+                Match(',');
+                var type = Type.Match();
+                var name = _look;
+                Match(Tag.ID);
+                p._params.Add(new Param(type, name.ToString()));
+            }
+            Match(')');
+            return p;
+        }
     }
 
     public class Param

@@ -17,8 +17,8 @@
 
         public override void Gen(int beginning, int after)
         {
-            int label1 = NewLable();
-            int lable2 = NewLable();
+            var label1 = NewLable();
+            var lable2 = NewLable();
             Expr.Jumping(0, lable2);
 
             EmitLabel(label1);
