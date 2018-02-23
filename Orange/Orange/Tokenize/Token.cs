@@ -24,7 +24,10 @@
             TRUE    = (char)274,
             WHILE   = (char)275,
             PRINT   = (char)276,
-            STRING  = (char)277
+            STRING  = (char)277,
+            PUBLIC  = (char)278,
+            PRIVATE = (char)279,
+            CLASS   = (char)280
         ;
     }
 

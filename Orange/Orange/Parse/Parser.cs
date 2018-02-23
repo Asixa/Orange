@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using Orange.Debug;
+using Orange.Parse.Core;
 using Orange.Parse.Statements;
 using Orange.Tokenize;
 
@@ -8,11 +11,13 @@ namespace Orange.Parse
     public class Parser
     {
         public static Parser current;
+        public static List<Snippet> snippets;
         #region Fields
         private Lexer _lexer;
         private Token _look;
         public Env Top;
         public int Used;
+        public Snippet snippet;
         #endregion
 
         public Parser(Lexer lex)
@@ -33,18 +38,17 @@ namespace Orange.Parse
         public void Match(int tag)
         {
             if (_look.TagValue == tag)  Move();
-            else  Error("syntax error");
+            else  Error("syntax error:"+_look.TagValue+"-"+(char)tag);
         }
 
-        public void Program()
+        public void Analyze()
         {
-            if (Orange.Program.debug)
-            {
-                Console.WriteLine("____________源代码______________");
-                Console.WriteLine(File.ReadAllText("Sample.org"));
-                Console.WriteLine("____________简化代码______________");
-            }
+            snippet=new Snippet();
+            Quotes();
+            snippet.GetAllType();
 
+            var a=(Class)Class();
+            return;
             var blk =  Block();
             var begin = blk.NewLable();
             var after = blk.NewLable();
@@ -54,7 +58,56 @@ namespace Orange.Parse
             if(Orange.Program.debug)TAC.Print();
         }
 
+        public void Finish()
+        {
+            snippets.Add(snippet);
+        }
+
         #region Statements
+
+        public Stmt Class()
+        {
+            var _class=new Class();
+            if (_look.TagValue == Tag.PUBLIC)
+            {
+                Match(Tag.PUBLIC);
+                _class.isPublic = true;
+            }
+            else if(_look.TagValue == Tag.PRIVATE)
+            {
+                Match(Tag.PRIVATE);
+            }
+            
+            Match(Tag.CLASS);
+            var tok = _look;
+            Match(Tag.ID);
+            _class.name = tok.ToString();
+            Match('{');
+            _class.methods.Add((Method)Method());
+            Match('}');
+            return _class;
+        }
+
+        public Stmt Method()
+        {
+            var  method=new Method();
+            if (_look.TagValue == Tag.PUBLIC)
+            {
+                Match(Tag.PUBLIC);
+                method.isPublic = true;
+            }
+            else if(_look.TagValue == Tag.PRIVATE)
+            {
+                Match(Tag.PRIVATE);
+            }
+            method.returnType=Type();
+            method.Name = _look.ToString();
+            Match(Tag.ID);
+            method.p_params=ParamDecla();
+            method.block=Block();
+            return method;
+        }
+
         public Stmt Block()
         {
              Match('{');
@@ -67,6 +120,69 @@ namespace Orange.Parse
              Top = savedEnv;
 
             return stmt;
+        }
+
+        public void Quotes()
+        {
+            while (_look.TagValue == '#')  //D -> type ID
+            {
+                Match('#');
+                if (_look.TagValue == '<')
+                {
+                    Match('<');
+                    var tok = _look;
+                    string _namespace="";
+                    Match(Tag.ID);
+                    _namespace += tok.ToString();
+
+                    while (_look.TagValue=='.')
+                    {
+                        Match('.');
+                        _namespace += ".";
+                        tok = _look;
+                        Match(Tag.ID);
+                        _namespace += tok.ToString();
+                    }
+
+                    Match('>');
+                    snippet.include.Add(new Quote(_namespace));
+                }
+                else
+                {
+                    Console.WriteLine(_look.TagValue);
+                    Error("syntax error");
+                }
+            }
+        }
+
+        public FuncParamsDecla ParamDecla()
+        {
+            FuncParamsDecla p=new FuncParamsDecla();
+            Match('(');
+            while (_look.TagValue==',')
+            {
+                Match(',');
+                var type = Type();
+                var name = _look;
+                Match(Tag.ID);
+                p._params.Add(new Param(type, name.ToString()));
+            }
+            Match(')');
+            return p;
+        }
+
+        public List<Expr> ParamInvoke()
+        {
+            List<Expr>e=new List<Expr>();
+            Match('(');
+            e.Add(Bool());
+            while (_look.TagValue==',')
+            {
+                Match(',');
+                e.Add(Bool());
+            }
+            Match(')');
+            return e;
         }
 
         public void Declarations()
@@ -84,11 +200,57 @@ namespace Orange.Parse
             }
         }
 
+        public Type ComplexType()
+        {
+            Type t=null;
+            string id = "";
+            id += _look.ToString();
+            Match(Tag.ID);
+            while (_look.TagValue=='.')
+            {
+                Match('.');
+                id += _look.ToString();
+                Match(Tag.ID);
+            }
+            t=new Type(id,Tag.ID,4);
+            return _look.TagValue != '[' ? t : Dimension(t);
+        }
+
+        public Stmt FuncCall()
+        {
+            FuncCall func_call = new FuncCall
+            {
+                name = ComplexType(),
+                _param = ParamInvoke()
+            };
+            Match(';');
+            return func_call;
+        }
+
+   
+
         public Type Type()
         {
-            var type = _look as Type;    //expect _look.tag == Tag.Basic
-             Match(Tag.BASIC);
-
+            Type type=null;
+            if (_look.TagValue == Tag.BASIC)
+            {
+                type = _look as Type; //expect _look.tag == Tag.Basic
+                Match(Tag.BASIC);
+            }
+            else if(_look.TagValue==Tag.ID)
+            {
+                
+                var word = _look as Word;
+                if (snippet.types.Contains(word.ToString()))
+                {
+                    type = new Type(word.Lexeme,Tag.ID,4);
+                }
+                else
+                {
+                    Error("未知的类型");
+                }
+                Match(Tag.ID);
+            }
             return _look.TagValue != '[' ? type :  Dimension(type);
         }
 
@@ -364,4 +526,6 @@ namespace Orange.Parse
             }
         }
     }
+
+
 }

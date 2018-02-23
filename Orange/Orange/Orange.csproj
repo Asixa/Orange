@@ -41,11 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compile\Compiler.cs" />
+    <Compile Include="Compile\IL\ILGenerater.cs" />
     <Compile Include="Debug\Debugger.cs" />
     <Compile Include="Parse\Core\BooleanExpr.cs" />
+    <Compile Include="Parse\Core\Class.cs" />
     <Compile Include="Parse\Core\Expr.cs" />
+    <Compile Include="Parse\Core\Method.cs" />
+    <Compile Include="Parse\Core\Quote.cs" />
+    <Compile Include="Parse\Snippet.cs" />
     <Compile Include="Parse\Statements\Break.cs" />
     <Compile Include="Parse\Statements\Do.cs" />
+    <Compile Include="Parse\Statements\FuncCall.cs" />
+    <Compile Include="Parse\Statements\FuncParamsDecla.cs" />
     <Compile Include="Parse\Statements\If.cs" />
     <Compile Include="Parse\Statements\IfElse.cs" />
     <Compile Include="Parse\Statements\Print.cs" />

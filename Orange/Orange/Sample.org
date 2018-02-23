@@ -1,14 +1,12 @@
-#<system>;
+#<System>
+#<System.IO>
 
 public class Program
 {
-	void Main()
+	Object Main()
 	{
-		int a;
-		while(a<100)
-		{
-			a=a+1;
-			print("H"+"E"+"L"+"L"+"O")
-		}
+		Title("Orange-HelloWorld");
+		print("HelloWorld");
+		Console.Readkey();
 	}
 }

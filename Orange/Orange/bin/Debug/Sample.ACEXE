@@ -1,14 +1,1 @@
-﻿TAG 1  
-LES t1 a 100
-IFN t1 ^2 
-TAG 3  
-PLU a a 1
-TAG 4  
-PLU t3 H E
-PLU t4 t3 L
-PLU t5 t4 L
-PLU t2 t5 O
-PRI t2  
-GO2 ^1  
-TAG 2  
-
+﻿

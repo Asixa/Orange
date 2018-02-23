@@ -5,13 +5,9 @@ namespace Orange
 {
     public class Constant : Expr
     {
-        public Constant(Token tok, Type type) : base(tok, type)
-        {
-        }
+        public Constant(Token tok, Type type) : base(tok, type){}
 
-        public Constant(int i) : base(new Int(i), Type.Int)
-        {
-        }
+        public Constant(int i) : base(new Int(i), Type.Int){}
 
         public static readonly Constant
             True = new Constant(Word.True, Type.Bool),

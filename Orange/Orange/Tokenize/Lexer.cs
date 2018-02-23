@@ -216,6 +216,9 @@ namespace Orange.Tokenize
             Reserve(new Word("do", Tag.DO));
             Reserve(new Word("break", Tag.BREAK));
             Reserve(new Word("print", Tag.PRINT));
+            Reserve(new Word("public",Tag.PUBLIC));
+            Reserve(new Word("private", Tag.PRIVATE));
+            Reserve(new Word("class",Tag.CLASS));
             Reserve(Word.True);
             Reserve(Word.False);
             Reserve(Parse.Type.Int);

@@ -1,9 +1,12 @@
+#<System>
+#<System.IO>
+
+public class Program
 {
-/*好好写码，永不装逼*/
-	int a;
-	while(a<100)
+	Object Main()
 	{
-		a=a+1;
-		print("H"+"E"+"L"+"L"+"O")
+		Title("Orange-HelloWorld");
+		print("HelloWorld");
+		Console.Readkey();
 	}
 }

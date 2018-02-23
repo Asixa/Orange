@@ -5,7 +5,13 @@ namespace MSIL_Lab
     {
         static void Main(string[] args)
         {
+            Console.Title = "Orange-HelloWorld";
+            Print("HelloWorld");
+        }
 
+        static void Print(string s)
+        {
+            Console.WriteLine(s);
         }
     }
 }
