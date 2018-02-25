@@ -30,7 +30,7 @@ namespace Orange.Parse
 
         public void Analyze()
         {
-            Console.WriteLine(((BoolTree)BoolTree.Match()).Op);
+            Console.WriteLine(((BoolTree)BoolTree.Match()));
            
             Console.WriteLine("OK");
             Console.ReadKey();
