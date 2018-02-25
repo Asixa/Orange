@@ -10,7 +10,7 @@
             Id = id;
             Expr = expr;
             if (null == Check(Id.Type, Expr.Type))
-                ErrorWithLine("type error");
+                Error("type error");
         }
 
         public Type Check(Type lhs, Type rhs)

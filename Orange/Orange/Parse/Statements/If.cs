@@ -11,7 +11,7 @@
             Expr = expr;
             Stmt = stmt;
             if (Expr.Type != Type.Bool)
-                Expr.ErrorWithLine("boolean required in if");
+                Error("boolean required in if");
         }
 
         public override void Gen(int begin, int after)

@@ -12,7 +12,7 @@ namespace Orange.Parse.Statements
             Match(Tag.ID);
             var id = Top.Get(tok);
             if (id == null)
-                ErrorWithLine(tok + " undeclared");
+                Error(tok + " undeclared");
 
             if (_look.TagValue == '=')
             {

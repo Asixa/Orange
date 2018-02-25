@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Orange.Parse.Core;
-using Orange.Parse.New.Operation.Boolean;
-using Orange.Parse.New.Operation.Math;
+using Orange.Parse.New.Operation;
+using Orange.Parse.New.Structure;
 using Orange.Parse.Structure;
 using Orange.Tokenize;
 

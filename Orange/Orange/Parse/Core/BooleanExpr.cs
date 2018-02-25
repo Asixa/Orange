@@ -33,7 +33,7 @@ namespace Orange
             Rhs = rhs;
             Type = Check(lhs.Type, rhs.Type);
             if (null == Type)
-                ErrorWithLine("type error");
+                Error("type error");
         }
 
         protected virtual Type Check(Type lhs, Type rhs)

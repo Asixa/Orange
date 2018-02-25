@@ -1,4 +1,4 @@
-﻿using Orange.Parse.NewStatements;
+﻿using Orange.Parse.New.Statements;
 using Orange.Tokenize;
 
 namespace Orange.Parse.Statements

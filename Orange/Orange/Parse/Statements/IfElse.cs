@@ -12,7 +12,7 @@
             Stmt1 = stmt1;
             Stmt2 = stmt2;
             if (Expr.Type != Type.Bool)
-                Expr.ErrorWithLine("boolean required in if");
+                Error("boolean required in if");
         }
 
         public override void Gen(int beginning, int after)
