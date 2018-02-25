@@ -218,7 +218,8 @@ namespace Orange.Tokenize
             Reserve(new Word("print", Tag.PRINT));
             Reserve(new Word("public",Tag.PUBLIC));
             Reserve(new Word("private", Tag.PRIVATE));
-            Reserve(new Word("class",Tag.CLASS));
+            Reserve(new Word("obj",Tag.OBJ));
+            Reserve(new Word("func",Tag.FUNC));
             Reserve(Word.True);
             Reserve(Word.False);
             Reserve(Type.Int);

@@ -16,7 +16,7 @@
             Expr = expr;
             Stmt = stmt;
             if (Expr.Type != Type.Bool)
-                Expr.Error("boolean requried in do");
+                Expr.ErrorWithLine("boolean requried in do");
         }
 
         public override void Gen(int begin, int after)

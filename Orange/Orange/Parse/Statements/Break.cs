@@ -7,7 +7,7 @@
         public Break()
         {
             if (Enclosing == null)
-                Error("unenclosed break");
+                ErrorWithLine("unenclosed break");
             Stmt = Enclosing;
         }
 

@@ -1,4 +1,5 @@
-﻿using Orange.Tokenize;
+﻿using Orange.Parse.NewStatements;
+using Orange.Tokenize;
 
 namespace Orange.Parse.Statements
 {
@@ -6,15 +7,14 @@ namespace Orange.Parse.Statements
     {
         public static Stmt Match()
         {
-            Match('{');
+            Match('[');
             var savedEnv = Top;
             Parser.current.Top = new Env(Top);
 
             Declarations();
-            var stmt =Stmts();
-            Match('}');
+            var stmt =Stmts.Match();
+            Match(']');
             Parser.current.Top = savedEnv;
-
             return stmt;
         }
 

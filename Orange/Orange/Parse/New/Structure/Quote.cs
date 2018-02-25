@@ -61,35 +61,35 @@ namespace Orange.Parse.Core
 
         public new static void Match()
         {
-            while (_look.TagValue == '#') 
+            Match('&');
+            Match('<');
+            snippet.include.Add(new Quote(MatchNamespace()));
+            while (_look.TagValue==',')
             {
-                Match('#');
-                if (_look.TagValue == '<')
-                {
-                    Match('<');
-                    var tok = _look;
-                    string _namespace = "";
-                    Match(Tag.ID);
-                    _namespace += tok.ToString();
+                
+                Match(',');
+                snippet.include.Add(new Quote(MatchNamespace()));
+            }
+            
+            Match('>');
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("引用命名空间:");
+            foreach (var t in snippet.include)Console.Write(t.name+"|");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.White;
+        }
 
-                    while (_look.TagValue == '.')
-                    {
-                        Match('.');
-                        _namespace += ".";
-                        tok = _look;
-                        Match(Tag.ID);
-                        _namespace += tok.ToString();
-                    }
-
-                    Match('>');
-                    snippet.include.Add(new Quote(_namespace));
-                }
-                else
-                {
-                    Console.WriteLine(_look.TagValue);
-                    Error("syntax error");
-                }
-            } 
+        public static string MatchNamespace()
+        {
+            var _namespace = _look.ToString();
+            Match(Tag.ID);
+            while (_look.TagValue == '.')
+            {
+                Match('.');
+                _namespace += "." + _look;
+                Match(Tag.ID);
+            }
+            return _namespace;
         }
     }
 }

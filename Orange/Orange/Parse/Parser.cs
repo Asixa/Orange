@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Orange.Parse.Core;
-using Orange.Parse.Statements;
+using Orange.Parse.New.Operation.Boolean;
+using Orange.Parse.New.Operation.Math;
+using Orange.Parse.Structure;
 using Orange.Tokenize;
 
 namespace Orange.Parse
@@ -27,21 +30,16 @@ namespace Orange.Parse
 
         public void Analyze()
         {
-            snippet=new Snippet();
+            Console.WriteLine(((BoolTree)BoolTree.Match()).Op);
+           
+            Console.WriteLine("OK");
+            Console.ReadKey();
+           snippet =new Snippet();
             Quote.Match();
             snippet.GetAllType();
 
-            var a=(Class)Class.Match();
+            while (_look.TagValue=='&')snippet.name_spaces.Add(NameSpace.Match());
             snippets.Add(snippet);
-            return;
-
-            var blk =  Block.Match();
-            var begin = blk.NewLable();
-            var after = blk.NewLable();
-            blk.EmitLabel(begin);
-            blk.Gen(begin, after);
-            blk.EmitLabel(after);
-            if(Orange.Program.debug)TAC.Print();
         }
     }
 }

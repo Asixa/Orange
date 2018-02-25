@@ -13,7 +13,7 @@
             Index = access.Index;
             Expr = expr;
             if (null == Check(access.Type, Expr.Type))
-                Error("type error");
+                ErrorWithLine("type error");
         }
 
         private Type Check(Type lhs, Type rhs)

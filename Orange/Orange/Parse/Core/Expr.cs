@@ -100,12 +100,12 @@ namespace Orange
                     Match(')');
                     return expr;
 
-                case Tag.NUM:
+                case Tag.INT:
                     expr = new Constant(_look, Parse.Type.Int);
                     Move();
                     return expr;
 
-                case Tag.REAL:
+                case Tag.FLOAT:
                     expr = new Constant(_look, Parse.Type.Float);
                     Move();
                     return expr;

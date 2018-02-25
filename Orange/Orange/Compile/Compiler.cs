@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Orange.Debug;
+using Orange.Parse;
 
 namespace Orange.Compile
 {
@@ -33,6 +35,54 @@ namespace Orange.Compile
         }
 
         public static void AddLine(string code) => IL_Code += code + "\n";
+
+        public static void Gen()
+        {
+            foreach (var t in Parser.snippets)
+            {
+                foreach (var t2 in t.name_spaces)
+                {
+                    t2.GenerateIL();
+                }
+            }
+        }
+
+        public class TagGenerater
+        {
+            public static int index;
+            public static void Clear() => index = 0;
+
+            public static string Get()
+            {
+                var result= "IL_" + To36(index).ToLower().PadLeft(4, '0');
+                index++;
+                return result;
+            }
+
+           public static string To36(int a)
+            {
+                int to=36, i = 0;
+                var array = new char[64];
+                while (a != 0)
+                {
+                    array[i] = (char) (a % to);
+                    if (array[i] >= 10)
+                        array[i] = (char)(array[i] - 10 + 'A');
+                    else
+                        array[i] =(char)(array[i]+ 48) ;
+                    a /= to;
+                    i++;
+                }
+                i--;
+                var result="";
+                while (i >= 0)
+                {
+                    result+=array[i];
+                    i--;
+                }
+                return result;
+            }
+        }
     }
 
     public class CompileSetting

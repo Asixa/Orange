@@ -1,16 +1,29 @@
 ﻿using System;
-namespace MSIL_Lab
+using System.Collections.Generic;
+using System.Linq;
+
+namespace a
 {
+
+    delegate int test(int a, int b);
     class Program
     {
         static void Main(string[] args)
         {
-            Print("HelloWorld");
+            test b2 = testfunc;
+            b2 += testfunc2;
+            test t = (a, b) => a += b;
+            Console.WriteLine(b2(1,2).ToString());
+            Console.ReadKey();
         }
 
-        static void Print(string s)
+        public static int testfunc(int a, int b)
         {
-            Console.WriteLine(s);
+            return 1000;
+        }
+        public static int testfunc2(int a, int b)
+        {
+            return 9999;
         }
     }
 }

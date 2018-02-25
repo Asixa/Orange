@@ -1,21 +1,11 @@
 ﻿using System.Collections.Generic;
-namespace Orange.Parse.Statements
+
+namespace Orange.Parse.New.Statements
 {
     public class FuncCall : Stmt
     {
         public Type name;
         public List<Expr> param;
-
-        public new static Stmt Match()
-        {
-            var func_call = new FuncCall
-            {
-                name = Type.ComplexType(),
-                param = ParamInvoke()
-            };
-            Match(';');
-            return func_call;
-        }
 
         public static List<Expr> ParamInvoke()
         {
@@ -29,6 +19,24 @@ namespace Orange.Parse.Statements
             }
             Match(')');
             return e;
+        }
+
+        public new static Stmt Match()
+        {
+            var func_call = new FuncCall
+            {
+                name = Type.ComplexType(),
+            };
+            Match('<');
+            Match('<');
+            if (_look.TagValue == '#')
+            {
+                Match('#');
+                Match(';');
+                return func_call;
+            }
+            Match(';');
+            return func_call;
         }
     }
 }

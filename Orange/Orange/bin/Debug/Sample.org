@@ -1,12 +1,9 @@
-#<System>
-#<System.IO>
+(1+2)*3-2*(2+2)==2&&2>3||255<1+2 ;
 
-public class Program
-{
-	Object Main()
-	{
-		//Title("Orange-HelloWorld");
-		print("HelloWorld");
-		//Console.Readkey();
-	}
-}
+//&<System,System.IO>  
+//&HelloWorld->[
+//	obj Program->[func Main<<|>>[Console.WriteLine<<#;]]
+//	obj Plane->[func fly<<|>>[Console.WriteLine<<#;]]
+//]
+//&FuckWorld->obj Car->[func Run<<|>>[]]
+//;

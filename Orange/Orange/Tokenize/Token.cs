@@ -17,9 +17,9 @@
             LE      = (char)267,    //used in syntax tree
             MINUS   = (char)268,    
             NE      = (char)269,
-            NUM     = (char)270,
+            INT     = (char)270,
             OR      = (char)271,
-            REAL    = (char)272,
+            FLOAT    = (char)272,
             TEMP    = (char)273,    //used in syntax tree
             TRUE    = (char)274,
             WHILE   = (char)275,
@@ -27,7 +27,9 @@
             STRING  = (char)277,
             PUBLIC  = (char)278,
             PRIVATE = (char)279,
-            CLASS   = (char)280
+            OBJ   = (char)280,
+            FUNC    = (char)281,
+            NOT     =(char)282
         ;
     }
 
@@ -50,7 +52,7 @@
     {
         public int Value;
 
-        public Int(int val): base(Tag.NUM)
+        public Int(int val): base(Tag.INT)
         {
             Value = val;
         }
@@ -85,6 +87,7 @@
             minus   = new Word("minus", Tag.MINUS),
             True    = new Word("true", Tag.TRUE),
             False   = new Word("false", Tag.FALSE),
+            Not=new Word("!",Tag.NOT),
             temp    = new Word("t", Tag.TEMP);
     }
 
@@ -92,7 +95,7 @@
     {
         public float Value;
 
-        public Float(float val): base(Tag.REAL)
+        public Float(float val): base(Tag.FLOAT)
         {
             Value = val;
         }

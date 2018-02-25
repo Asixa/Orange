@@ -37,6 +37,7 @@ namespace Orange.Parse
         }
 
         public static readonly Type
+            Void    =   new Type("void",Tag.BASIC,1),
             Int     =   new Type("int",     Tag.BASIC, 4),
             Float   =   new Type("float",   Tag.BASIC, 8),
             Char    =   new Type("char",    Tag.BASIC, 1),
@@ -50,14 +51,13 @@ namespace Orange.Parse
 
         public static Type Max(Type lhs, Type rhs)
         {
-            if (lhs == String || rhs == String)
-                return String;
-            if (!Numeric(lhs) || !Numeric(rhs))
-                return null;
-            if (lhs == Float || rhs == Float)
-                return Float;
-            if (lhs == Int || rhs == Int)
-                return Int;
+            if (lhs == String || rhs == String)return String;
+
+            if (!Numeric(lhs) || !Numeric(rhs))return null;
+
+            if (lhs == Float || rhs == Float)return Float;
+
+            if (lhs == Int || rhs == Int)return Int;
            
             return Char;
         }
@@ -86,6 +86,7 @@ namespace Orange.Parse
             }
             return Stmt._look.TagValue != '[' ? type : Dimension(type);
         }
+
         public static Type ComplexType()
         {
             Type t = null;
@@ -95,7 +96,7 @@ namespace Orange.Parse
             while (Stmt._look.TagValue == '.')
             {
                 Stmt.Match('.');
-                id += Stmt._look.ToString();
+                id += "."+Stmt._look;
                 Stmt.Match(Tag.ID);
             }
             t = new Type(id, Tag.ID, 4);
@@ -106,7 +107,7 @@ namespace Orange.Parse
         {
             Stmt.Match('[');
             var tok = Stmt._look;
-            Stmt.Match(Tag.NUM);
+            Stmt.Match(Tag.INT);
             Stmt.Match(']');
 
             if (Stmt._look.TagValue == '[')

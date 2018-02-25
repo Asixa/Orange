@@ -3,6 +3,7 @@ namespace Orange.Debug
 {
     public class Debugger
     {
+        
         public static void Error(string msg)
         {
             Message(msg,ConsoleColor.Red);
@@ -15,6 +16,12 @@ namespace Orange.Debug
             Console.ForegroundColor = color;
             Console.WriteLine(msg);
             Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        public class Errors
+        {
+            public static string
+                TypeError = "类型错误";
         }
     }
 }

@@ -1,37 +1,20 @@
-﻿using Orange.Parse.Statements;
+﻿using Orange.Parse.New.Statements;
+using Orange.Parse.Statements;
 using Orange.Tokenize;
 
 namespace Orange.Parse
 {
     public class Stmt : Node
     {
+        #region 待删除
         public int After { get; protected set; }
-
-        public Stmt()
-        {
-            After = 0;
-        }
-
-        public virtual void Gen(int begin, int after)
-        {
-        }
+        public Stmt(){After = 0;}
+        public virtual void Gen(int begin, int after){}
+        #endregion
 
         public static Stmt Null = new Stmt();
-
         public static Stmt Enclosing = Null;
 
-        public static Token _look => Parser.current._look;
-        public static void Move() => Parser.current._look = Parser.current._lexer.Scan();
-        public static void Match(int tag)
-        {
-                if (_look.TagValue == tag) Move();
-                else Error("syntax error:" + _look.TagValue + "-" + (char)tag);
-        }
-        public static Env Top => Parser.current.Top;
-        public static Snippet snippet => Parser.current.snippet;
-        public static void Error(string msg) => Debug.Debugger.Error("[ERROR] line " + Lexer.Line + ": " + msg);
-
-        public static Stmt Stmts() => _look.TagValue == '}' ? Null : new Seq(Match(), Stmts());
         public static Stmt Match()
         {
             Expr expr;
@@ -99,7 +82,7 @@ namespace Orange.Parse
                     return Block.Match();
 
                 default:
-                    return IDOper.Assign();
+                    return FuncCall.Match();
             }
         }
     }

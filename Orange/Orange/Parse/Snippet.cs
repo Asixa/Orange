@@ -1,14 +1,14 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Orange.Parse.Core;
-
+using Orange.Parse.New.Structure;
 namespace Orange.Parse
 {
     public class Snippet
     {   
         public List<Quote> include = new List<Quote>();
         public List<string> types = new List<string>();
+        public List<NameSpace>name_spaces=new List<NameSpace>();
 
         public void GetAllType()
         {
