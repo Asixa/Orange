@@ -1,4 +1,5 @@
 ﻿using Orange.Debug;
+using Orange.Parse.Core;
 using Orange.Tokenize;
 
 namespace Orange.Parse.New.Operation
@@ -13,10 +14,7 @@ namespace Orange.Parse.New.Operation
             left = lhs;
             right = rhs;
             Type = Check(lhs.Type,rhs.Type);
-            if (Type==null)
-            {
-                Error(Debugger.Errors.TypeError);
-            }
+            if (Type==null)Error(Debugger.Errors.TypeError);
         }
         public override string ToString() => left + " " + Op + " " + right;
 

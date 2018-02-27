@@ -29,7 +29,8 @@
             PRIVATE = (char)279,
             OBJ   = (char)280,
             FUNC    = (char)281,
-            NOT     =(char)282
+            NOT     =(char)282,
+            LET    =(char)283
         ;
     }
 

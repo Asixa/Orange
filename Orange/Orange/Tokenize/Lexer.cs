@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Type = Orange.Parse.Type;
+using Type = Orange.Parse.Core.Type;
 
 namespace Orange.Tokenize
 {
@@ -220,6 +220,7 @@ namespace Orange.Tokenize
             Reserve(new Word("private", Tag.PRIVATE));
             Reserve(new Word("obj",Tag.OBJ));
             Reserve(new Word("func",Tag.FUNC));
+            Reserve(new Word("let",Tag.LET));
             Reserve(Word.True);
             Reserve(Word.False);
             Reserve(Type.Int);

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Orange.Parse.Core;
 using Orange.Parse.New.Operation;
 using Orange.Parse.New.Structure;
-using Orange.Parse.Structure;
 using Orange.Tokenize;
 
 namespace Orange.Parse
@@ -25,20 +24,15 @@ namespace Orange.Parse
             Top = null;
              Used = 0;
              _lexer = lex;
-             Stmt.Move();
+            Node.Move();
         }
 
         public void Analyze()
         {
-            Console.WriteLine(((BoolTree)BoolTree.Match()));
-           
-            Console.WriteLine("OK");
-            Console.ReadKey();
-           snippet =new Snippet();
+            snippet =new Snippet();
             Quote.Match();
             snippet.GetAllType();
-
-            while (_look.TagValue=='&')snippet.name_spaces.Add(NameSpace.Match());
+            while (_look.TagValue=='&')snippet.NamespaceDefine.Add(NameSpace.Match());
             snippets.Add(snippet);
         }
     }

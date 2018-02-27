@@ -1,4 +1,5 @@
 ﻿using Orange.Parse.New.Statements;
+using Orange.Parse.Standard1._0.Statements;
 using Orange.Parse.Statements;
 using Orange.Tokenize;
 
@@ -11,6 +12,8 @@ namespace Orange.Parse
         public Stmt(){After = 0;}
         public virtual void Gen(int begin, int after){}
         #endregion
+
+        public virtual void GenerateIL() { }
 
         public static Stmt Null = new Stmt();
         public static Stmt Enclosing = Null;
@@ -80,6 +83,8 @@ namespace Orange.Parse
 
                 case '{':
                     return Block.Match();
+                case Tag.LET:
+                    return Let.Match();
 
                 default:
                     return FuncCall.Match();

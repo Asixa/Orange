@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Orange.Tokenize;
 
-namespace Orange.Parse
+namespace Orange.Parse.Core
 {
     public class Env
     {
@@ -30,19 +32,22 @@ namespace Orange.Parse
     public class Type : Word
     {
         public int Width;
+        public System.Type SystemType;
+        public string nameSpace;
 
-        public Type(string typeName, char tag, int width): base(typeName, tag) 
+        public Type(string typeName, char tag, int width,System.Type t): base(typeName, tag) 
         { 
-            Width = width; 
+            Width = width;
+            SystemType = t;
         }
 
         public static readonly Type
-            Void    =   new Type("void",Tag.BASIC,1),
-            Int     =   new Type("int",     Tag.BASIC, 4),
-            Float   =   new Type("float",   Tag.BASIC, 8),
-            Char    =   new Type("char",    Tag.BASIC, 1),
-            Bool    =   new Type("bool",    Tag.BASIC, 1),
-            String  =   new Type("string",  Tag.BASIC,1);
+            Void    =   new Type("void",Tag.BASIC,1,typeof(void)),
+            Int     =   new Type("int",     Tag.BASIC, 4,typeof(int)),
+            Float   =   new Type("float",   Tag.BASIC, 8,typeof(float)),
+            Char    =   new Type("char",    Tag.BASIC, 1,typeof(char)),
+            Bool    =   new Type("bool",    Tag.BASIC, 1,typeof(bool)),
+            String  =   new Type("string",  Tag.BASIC,1,typeof(string));
 
         public static bool Numeric(Type type) 
         {
@@ -62,55 +67,68 @@ namespace Orange.Parse
             return Char;
         }
 
-        public static Type Match()
-        {
-            Type type = null;
-            if (Stmt._look.TagValue == Tag.BASIC)
-            {
-                type = Stmt._look as Type; //expect _look.tag == Tag.Basic
-                Stmt.Match(Tag.BASIC);
-            }
-            else if (Stmt._look.TagValue == Tag.ID)
-            {
 
-                var word = Stmt._look as Word;
-                if (Stmt.snippet.types.Contains(word.ToString()))
-                {
-                    type = new Type(word.Lexeme, Tag.ID, 4);
-                }
-                else
-                {
-                    Error("未知的类型");
-                }
-                Stmt.Match(Tag.ID);
+        public static Type Match()//可返回类型，也可返回字段，也可返回属性
+        {
+            Type t;
+            if (Node._look.TagValue == Tag.BASIC)
+            {
+                t = Node._look as Type;
+                Node.Match(Tag.BASIC);
             }
-            return Stmt._look.TagValue != '[' ? type : Dimension(type);
+            else
+            {
+                var id = "";
+                var _namespace = "";
+
+                id += Node._look.ToString();
+                Node.Match(Tag.ID);
+                switch (CheckHeader(id))
+                {
+                    case 1:break;
+                    case 2:break;
+                    case 3:break;
+                    case 4:
+                        for (var i = 0; i < Parser.current.snippet.typesNamespace.Count; i++)
+                        {
+                            if (Parser.current.snippet.typesNamespace[i].Contains(id))
+                                _namespace = Parser.current.snippet.include[i].name;
+                        }
+                        break;
+                    default:break;
+                }
+
+                while (Node._look.TagValue == '.')
+                {
+                    Node.Match('.');
+                    id += "." + Node._look;
+                    Node.Match(Tag.ID);
+                }
+
+                t = new Type(id, Tag.ID, 4, System.Type.GetType(_namespace+id)) {nameSpace = _namespace};
+            }
+
+            return Node._look.TagValue != '[' ? t : Dimension(t);
         }
 
-        public static Type ComplexType()
+        private static int CheckHeader(string header)
         {
-            Type t = null;
-            string id = "";
-            id += Stmt._look.ToString();
-            Stmt.Match(Tag.ID);
-            while (Stmt._look.TagValue == '.')
-            {
-                Stmt.Match('.');
-                id += "."+Stmt._look;
-                Stmt.Match(Tag.ID);
-            }
-            t = new Type(id, Tag.ID, 4);
-            return Stmt._look.TagValue != '[' ? t : Dimension(t);
+            //TODO 检查是不是变量               return 1;
+            //TODO 检查是不是已经声明了的类      return 2;
+            //TODO 检查是不是本地函数            return 3;
+            if (Parser.current.snippet.types.Contains(header)) return 4;
+            Error("未知的类型");
+            return -1;
         }
 
         public static Type Dimension(Type type)
         {
-            Stmt.Match('[');
+            Node.Match('[');
             var tok = Stmt._look;
-            Stmt.Match(Tag.INT);
-            Stmt.Match(']');
+            Node.Match(Tag.INT);
+            Node.Match(']');
 
-            if (Stmt._look.TagValue == '[')
+            if (Node._look.TagValue == '[')
                 type = Dimension(type);
 
             return new Array(((Int)tok).Value, type);
@@ -124,7 +142,7 @@ namespace Orange.Parse
         public Type Of;
         public int Size;
         
-        public Array(int sz, Type type): base("[]",Tag.INDEX, sz * type.Width)
+        public Array(int sz, Type type): base("[]",Tag.INDEX, sz * type.Width,typeof(Array))//TODO
         {
             Size = sz;
             Of = type;

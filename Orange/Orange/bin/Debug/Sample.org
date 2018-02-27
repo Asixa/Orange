@@ -1,9 +1,8 @@
-(1+2)*3-2*(2+2)==2&&2>3||255<1+2 ;
-
-//&<System,System.IO>  
-//&HelloWorld->[
-//	obj Program->[func Main<<|>>[Console.WriteLine<<#;]]
-//	obj Plane->[func fly<<|>>[Console.WriteLine<<#;]]
-//]
-//&FuckWorld->obj Car->[func Run<<|>>[]]
-//;
+&<System,System.IO>  
+&HelloWorld->[
+	obj Program->[
+		func Main<<|>>[
+			let Console.Title = "SampleTitle";
+		]
+	]
+];

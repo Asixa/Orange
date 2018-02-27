@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using Orange.Compile;
+using Orange.Compile.IL;
 using Orange.Parse;
-using Orange.Parse.Core;
+using Orange.Parse.New.Structure;
 using Orange.Tokenize;
 
 namespace Orange
@@ -13,25 +14,20 @@ namespace Orange
         public static string path;
         static void Main(string[] args)
         {
+            var watch = new System.Diagnostics.Stopwatch(); watch.Start();
+
+            path = args.Length == 2 && args[0] == "-c" ? args[1] : "Sample.org";
             Compiler.includes.Add("C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\System.dll");
             Compiler.includes.Add("C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\mscorlib.dll");
+            Compiler.setting.AssemblyName = Compiler.setting.ModuleName = Path.GetFileNameWithoutExtension(path);
             Quote.GetAllAvaliableNameSpace();
-            var watch = new System.Diagnostics.Stopwatch();
-            watch.Start();
-            path = args.Length == 2 && args[0] == "-c" ? args[1] : "Sample.org";
-            var lex = new Lexer(new StreamReader(path));
-            var parse = new Parser(lex);
-            parse.Analyze();
 
-            TAC.Generate(Path.GetDirectoryName(path)+Path.GetFileNameWithoutExtension(path)+".ACEXE");
-            var meantime = watch.Elapsed.TotalMilliseconds;
-            Debug.Debugger.Message("编译完成，耗时" + meantime + "毫秒",ConsoleColor.Green);
+            new Parser(new Lexer(new StreamReader(path))).Analyze();
+            ILGenerator.Generate();
 
-            Compiler.setting.AssemblyName = Compiler.setting.ModuleName = Path.GetFileNameWithoutExtension(Path.GetFileName(path));
-            Compiler.Gen_MANIFEST();
-            Compiler.Gen();
             
-            Console.WriteLine(Compiler.IL_Code);
+
+            Debug.Debugger.Message("编译完成，耗时" + watch.Elapsed.TotalMilliseconds + "毫秒", ConsoleColor.Green);
             Console.ReadKey();
         }
     }

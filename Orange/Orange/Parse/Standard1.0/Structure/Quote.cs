@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Orange.Tokenize;
 
-namespace Orange.Parse.Core
+namespace Orange.Parse.New.Structure
 {
     public class Quote:Stmt
     {
@@ -11,10 +11,11 @@ namespace Orange.Parse.Core
         public Quote(string name)
         {
             this.name = name;
-            if(!namespaces.Contains(name))Debug.Debugger.Error("未知的命名空间");
+            if(!AvaliableNamespaces.Contains(name))Debug.Debugger.Error("未知的命名空间");
         }
 
-        public static List<string>namespaces=new List<string>();
+        public static List<string>AvaliableNamespaces=new List<string>();
+        
 
         public static void GetAllAvaliableNameSpace()
         {
@@ -29,31 +30,31 @@ namespace Orange.Parse.Core
                     if (lvs.Count <= 0) continue;
                     foreach (var t1 in lvs)
                     {
-                        if(!namespaces.Contains(t1))
-                        namespaces.Add(t1);
+                        if(!AvaliableNamespaces.Contains(t1))
+                        AvaliableNamespaces.Add(t1);
                     }
                 }
             }
         }
 
-        static List<string> GetNameSpaceLevels(string nameSpace)
+        private static List<string> GetNameSpaceLevels(string nameSpace)
         {
-            var strCopy = nameSpace;
+            var str_copy = nameSpace;
             var list = new List<string>();
-            if (strCopy == null)
+            if (str_copy == null)
             {
                 return list;
             }
             while (true)
             {
-                var dotPos = strCopy.LastIndexOf('.');
-                if (dotPos < 0)
+                var dot_pos = str_copy.LastIndexOf('.');
+                if (dot_pos < 0)
                 {
                     break;
                 }
-                var currentSpace = strCopy.Substring(0, dotPos);
-                list.Insert(0, currentSpace);
-                strCopy = currentSpace;
+                var current_space = str_copy.Substring(0, dot_pos);
+                list.Insert(0, current_space);
+                str_copy = current_space;
             }
             list.Add(nameSpace);
             return list;
@@ -63,23 +64,18 @@ namespace Orange.Parse.Core
         {
             Match('&');
             Match('<');
-            snippet.include.Add(new Quote(MatchNamespace()));
+            snippet.include.Add(new Quote(MatchSingleNamespace()));
             while (_look.TagValue==',')
             {
                 
                 Match(',');
-                snippet.include.Add(new Quote(MatchNamespace()));
+                snippet.include.Add(new Quote(MatchSingleNamespace()));
             }
             
             Match('>');
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("引用命名空间:");
-            foreach (var t in snippet.include)Console.Write(t.name+"|");
-            Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.White;
         }
 
-        public static string MatchNamespace()
+        public static string MatchSingleNamespace()
         {
             var _namespace = _look.ToString();
             Match(Tag.ID);
@@ -92,4 +88,5 @@ namespace Orange.Parse.Core
             return _namespace;
         }
     }
+
 }

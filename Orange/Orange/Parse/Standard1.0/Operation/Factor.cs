@@ -1,4 +1,5 @@
-﻿using Orange.Tokenize;
+﻿using Orange.Parse.Core;
+using Orange.Tokenize;
 
 namespace Orange.Parse.New.Operation
 {
@@ -42,17 +43,30 @@ namespace Orange.Parse.New.Operation
                     Move();
                     return factor;
                 case Tag.ID:
-                    var s = _look.ToString();
-                    var id = Top.Get(_look);
-                    if (id == null)
-                        Error(_look + " 未声明的标识符");
-                    Move();
-                    return null;
+                    //var id =Type.Match();
+
+
+                    //var s = _look.ToString();
+                    //var id = Top.Get(_look);
+                    //if (id == null)
+                    //    Error(_look + " 未声明的标识符");
+                    //Move();
                     //return id;
+
+                    return null;
                 default:
-                    Error("语法错误=>Factor");
+                    Error("语法错误=>Factor "+_look);
                     return null;
             }
+        }
+    }
+
+    public class Identifier : LogicNode
+    {
+        public string name;
+        public Identifier(string name,Type type) : base(null, type)
+        {
+            this.name = name;
         }
     }
 }

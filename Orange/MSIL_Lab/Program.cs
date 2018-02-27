@@ -1,29 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace a
 {
-
-    delegate int test(int a, int b);
-    class Program
+    public class Program
     {
+        public static int a;
         static void Main(string[] args)
         {
-            test b2 = testfunc;
-            b2 += testfunc2;
-            test t = (a, b) => a += b;
-            Console.WriteLine(b2(1,2).ToString());
+            c("HelloWorld");
+            Console.WriteLine(Type.GetType("a.Program").GetField("a"));
             Console.ReadKey();
+           
         }
 
-        public static int testfunc(int a, int b)
+        public static void c(string a)
         {
-            return 1000;
-        }
-        public static int testfunc2(int a, int b)
-        {
-            return 9999;
+            Console.WriteLine(a);
         }
     }
 }

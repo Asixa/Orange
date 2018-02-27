@@ -1,4 +1,5 @@
 ﻿using Orange.Parse;
+using Orange.Parse.Core;
 using Orange.Tokenize;
 
 namespace Orange
@@ -101,12 +102,12 @@ namespace Orange
                     return expr;
 
                 case Tag.INT:
-                    expr = new Constant(_look, Parse.Type.Int);
+                    expr = new Constant(_look, Type.Int);
                     Move();
                     return expr;
 
                 case Tag.FLOAT:
-                    expr = new Constant(_look, Parse.Type.Float);
+                    expr = new Constant(_look, Type.Float);
                     Move();
                     return expr;
 
@@ -120,7 +121,7 @@ namespace Orange
                     Move();
                     return expr;
                 case Tag.STRING:
-                    expr = new Constant(_look, Parse.Type.String);
+                    expr = new Constant(_look, Type.String);
                     Move();
                     return expr;
                 default:

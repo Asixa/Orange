@@ -1,5 +1,3 @@
 @echo off
-cls
-ACS -c Sample.acs
-ACSI Sample.ACEXE
+Orange -c Sample.org
 PAUSE

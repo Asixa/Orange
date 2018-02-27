@@ -1,4 +1,6 @@
-﻿namespace Orange.Parse.Statements
+﻿using Orange.Parse.Core;
+
+namespace Orange.Parse.Statements
 {
     public class If : Stmt
     {

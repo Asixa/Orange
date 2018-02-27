@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Orange.Parse
+namespace Orange.Parse.Core
 {
     [Serializable]
     public class TAC

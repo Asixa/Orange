@@ -12,5 +12,10 @@
 
         public new static Stmt Match() => _look.TagValue == ']' ? Null : new Stmts(Stmt.Match(),Match());
 
+        public override void GenerateIL()
+        {
+            stmt1.GenerateIL();
+            stmt2.GenerateIL();
+        }
     }
 }
