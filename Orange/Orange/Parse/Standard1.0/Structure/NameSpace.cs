@@ -8,6 +8,7 @@ namespace Orange.Parse.New.Structure
     {
         public string name;
         public List<Obj> objs=new List<Obj>();
+
         public new static NameSpace Match()
         {
             var space=new NameSpace();
