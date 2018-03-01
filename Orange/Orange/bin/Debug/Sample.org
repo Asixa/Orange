@@ -1,8 +1,20 @@
-&<System,System.IO>  
-&HelloWorld->[
-	obj Program->[
-		func Main<<|>>[
-			let Console.Title = "SampleTitle";
-		]
-	]
-];
+import<System,System.IO>  
+
+namespace HelloWorld->obj Program
+	{
+		func Main(|)
+		{
+			Print<<#;
+		}
+
+		func Print(|)
+		{
+			def string txt;
+			txt="SampleTitle";
+			let Console.Title = txt;
+			Console.WriteLine<<"HelloWorld";
+			Console.ReadLine<<#;
+		}
+	}
+;
+

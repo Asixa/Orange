@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Orange.Parse.Core;
-using Orange.Parse.New.Operation;
 using Orange.Parse.New.Structure;
 using Orange.Tokenize;
 
@@ -32,7 +30,7 @@ namespace Orange.Parse
             snippet =new Snippet();
             Quote.Match();
             snippet.GetAllType();
-            while (_look.TagValue=='&')snippet.NamespaceDefine.Add(NameSpace.Match());
+            while (_look.TagValue==Tag.NAMESPACE)snippet.namespace_define.Add(NameSpace.Match());
             snippets.Add(snippet);
         }
     }

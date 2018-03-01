@@ -1,5 +1,7 @@
-﻿using Orange.Parse.Core;
+﻿using System;
+using Orange.Debug;
 using Orange.Tokenize;
+using Type = Orange.Parse.Core.Type;
 
 namespace Orange.Parse.New.Operation
 {
@@ -43,30 +45,17 @@ namespace Orange.Parse.New.Operation
                     Move();
                     return factor;
                 case Tag.ID:
-                    //var id =Type.Match();
-
-
-                    //var s = _look.ToString();
-                    //var id = Top.Get(_look);
-                    //if (id == null)
-                    //    Error(_look + " 未声明的标识符");
-                    //Move();
-                    //return id;
-
-                    return null;
+                    var tok = _look;
+                    var identitifer = Type.Match();
+                    var variable = Top.Get(_look);
+                    if (variable == null)
+                        Error(_look + Debugger.Errors.UnknownVariable);
+                    Move();
+                    return new Factor(tok, identitifer.check());
                 default:
-                    Error("语法错误=>Factor "+_look);
+                    Error(Debugger.Errors.GrammarError+" "+_look);
                     return null;
             }
-        }
-    }
-
-    public class Identifier : LogicNode
-    {
-        public string name;
-        public Identifier(string name,Type type) : base(null, type)
-        {
-            this.name = name;
         }
     }
 }

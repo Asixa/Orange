@@ -12,28 +12,27 @@ namespace Orange.Parse.New.Structure
         public new static NameSpace Match()
         {
             var space=new NameSpace();
-            Match('&');
+            Match(Tag.NAMESPACE);
             space.name = _look.ToString();
             Match(Tag.ID);
-            Match('-');
-            Match('>');
-            if (_look.TagValue == '[')
+            if (_look.TagValue == '-')
             {
-                Match('[');
-                while (_look.TagValue == Tag.OBJ) space.objs.Add(Obj.Match());
-                Match(']');
+                Match('-');
+                Match('>');
+                space.objs.Add(Obj.Match(space));
             }
-            else space.objs.Add(Obj.Match());
+            else
+            {
+                Match('{');
+                while (_look.TagValue == Tag.OBJ) space.objs.Add(Obj.Match(space));
+                Match('}');
+            }
             return space;
         }
 
-        public void GenerateIL()
+        public void Create()
         {
-            foreach (var t in objs)
-            {
-                t._namespace = name;
-                t.GenerateIL();
-            }
+            foreach (var obj in objs)obj.Create(this);
         }
     }
 }

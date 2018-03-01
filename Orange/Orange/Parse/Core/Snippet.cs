@@ -6,30 +6,30 @@ namespace Orange.Parse.Core
 {
     public class Snippet
     {   
-        public List<Quote> include = new List<Quote>();
+        public List<Quote> include = new List<Quote>();                             //此片段引用的命名空间
+
         public List<string> types = new List<string>();
+        public List<List<string>> types_namespace = new List<List<string>>();       //保存每个type所属的命名空间
 
-        public List<List<string>> typesNamespace = new List<List<string>>();
-
-        public List<NameSpace>NamespaceDefine=new List<NameSpace>();
+        public List<NameSpace>namespace_define=new List<NameSpace>();               //所有匹配到的命名空间结构
 
         public void GetAllType()
         {
-            foreach (var t in include)
+            foreach (var quote in include)
             {
                 var group = new List<string>();
                 
-                foreach (var t2 in Compile.Compiler.includes)
+                foreach (var dll in Compile.Compiler.dlls)
                 {
-                    var asm = Assembly.LoadFile(t2);
-                    foreach (var t3 in asm.GetTypes())
+                    var asm = Assembly.LoadFile(dll);
+                    foreach (var type in asm.GetTypes())
                     {
-                        if (t.name != t3.Namespace) continue;
-                        types.Add(t3.Name);
-                        @group.Add(t3.Name);
+                        if (quote.name != type.Namespace) continue;
+                        types.Add(type.Name);
+                        @group.Add(type.Name);
                     }
                 }
-                typesNamespace.Add(group);
+                types_namespace.Add(group);
             }
         }
     }

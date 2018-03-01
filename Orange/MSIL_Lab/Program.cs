@@ -1,20 +1,19 @@
 ﻿using System;
+using System.Reflection;
+using System.Reflection.Emit;
+
 namespace a
 {
     public class Program
     {
-        public static int a;
+        public  int a;
         static void Main(string[] args)
         {
-            c("HelloWorld");
-            Console.WriteLine(Type.GetType("a.Program").GetField("a"));
-            Console.ReadKey();
-           
+            string b;
+            b = "2333";
+            Console.ReadLine();
+            int c;
         }
 
-        public static void c(string a)
-        {
-            Console.WriteLine(a);
-        }
     }
 }

@@ -19,7 +19,7 @@ namespace Orange.Parse.New.Structure
 
         public static void GetAllAvaliableNameSpace()
         {
-            foreach (var t in Compile.Compiler.includes)
+            foreach (var t in Compile.Compiler.dlls)
             {
                 
                 var asm = Assembly.LoadFile(t);
@@ -62,7 +62,7 @@ namespace Orange.Parse.New.Structure
 
         public new static void Match()
         {
-            Match('&');
+            Match(Tag.IMPORT);
             Match('<');
             snippet.include.Add(new Quote(MatchSingleNamespace()));
             while (_look.TagValue==',')

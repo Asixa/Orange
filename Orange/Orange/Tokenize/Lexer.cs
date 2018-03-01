@@ -2,39 +2,40 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Orange.Debug;
 using Type = Orange.Parse.Core.Type;
 
 namespace Orange.Tokenize
 {
     public class Lexer
     {
-        public StreamReader _reader;
+        public StreamReader reader;
         private char peek = ' ';
         public bool EofReached { get; private set; }
-        public static int Line = 1;
+        public static int line = 1;
         public Dictionary<string, Word> KeyWords = new Dictionary<string, Word>();
 
-        private void Reserve(Word word)=>KeyWords.Add(word.Lexeme, word);
+        private void Reserve(Word word)=>KeyWords.Add(word.lexeme, word);
         
         public Lexer(StreamReader reader)
         {
-            _reader = reader;
+            this.reader = reader;
             Reserve();
         }
 
-        public void Error(string msg) => Debug.Debugger.Error("[ERROR] line " + Line + ": " + msg);
+        public void Error(string msg) => Debugger.Error(Debugger.Errors.Error+Debugger.Errors.Line+ ": " + msg);
 
         private bool ReadChar()
         {
             try
             {
-                if (-1 == _reader.Peek())
+                if (-1 == reader.Peek())
                 {
                     EofReached = true;
                     return false;
                 }
 
-                peek = (char) _reader.Read();
+                peek = (char) reader.Read();
                 return true;
             }
             catch (Exception e)
@@ -56,8 +57,7 @@ namespace Orange.Tokenize
 
         public Token Scan()
         {
-            //white spaces
-            for (; !EofReached; ReadChar())
+            for (; !EofReached; ReadChar())//去除空白
             {
                 if (peek == ' ' || peek == '\t')
                 {
@@ -65,15 +65,15 @@ namespace Orange.Tokenize
                 else if (peek == '\r')
                 {
                     ReadChar();
-                    ++Line;
+                    ++line;
                 }
                 else
                     break;
             }
 
             if (EofReached) return null;
-            //注释
-            if (peek == '/') //开始检测注释
+
+            if (peek == '/') //检测注释
             {
                 ReadChar();
                 if (peek == '/')
@@ -97,7 +97,7 @@ namespace Orange.Tokenize
                     {
                         if (peek == '\r')
                         {
-                            Line++;
+                            line++;
                             ReadChar();
                         }
                         if (peek == '*')
@@ -119,7 +119,7 @@ namespace Orange.Tokenize
                 return new Token('/');
             }
 
-            //operators
+            //操作符
             switch (peek)
             {
                 case '&':
@@ -136,8 +136,7 @@ namespace Orange.Tokenize
                     return ReadChar('=') ? Word.Greater : new Token('>');
             }
 
-            //strings
-            if (peek == '"')
+            if (peek == '"')//分析字符串
             {
                 var s = "";
                 ReadChar();
@@ -163,8 +162,7 @@ namespace Orange.Tokenize
                 }
             }
 
-            //numbers
-            if (char.IsDigit(peek))
+            if (char.IsDigit(peek))//分析数字
             {
                 var v = 0;
                 do
@@ -186,8 +184,7 @@ namespace Orange.Tokenize
                 return new Float(f);
             }
 
-            //identifiers
-            if (char.IsLetter(peek))
+            if (char.IsLetter(peek))//分析标识符
             {
                 var b = new StringBuilder();
                 do
@@ -207,7 +204,6 @@ namespace Orange.Tokenize
             return tok;
         }
 
-
         private void Reserve()
         {
             Reserve(new Word("if", Tag.IF));
@@ -221,6 +217,10 @@ namespace Orange.Tokenize
             Reserve(new Word("obj",Tag.OBJ));
             Reserve(new Word("func",Tag.FUNC));
             Reserve(new Word("let",Tag.LET));
+            Reserve(new Word("def",Tag.DEF));
+            Reserve(new Word("import",Tag.IMPORT));
+            Reserve(new Word("namespace",Tag.NAMESPACE));
+            Reserve(new Word("call",Tag.CALL));
             Reserve(Word.True);
             Reserve(Word.False);
             Reserve(Type.Int);

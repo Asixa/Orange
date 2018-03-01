@@ -1,4 +1,6 @@
-﻿namespace Orange.Tokenize
+﻿using System.Globalization;
+
+namespace Orange.Tokenize
 {
     public class Tag
     {
@@ -30,7 +32,11 @@
             OBJ   = (char)280,
             FUNC    = (char)281,
             NOT     =(char)282,
-            LET    =(char)283
+            LET    =(char)283,
+            DEF     =(char)284,
+            IMPORT  =(char)285,
+            NAMESPACE=(char)286,
+            CALL    =(char)287
         ;
     }
 
@@ -43,40 +49,31 @@
             TagValue = tag;
         }
 
-        public override string ToString()
-        {
-            return TagValue.ToString();
-        }
+        public override string ToString()=>TagValue.ToString();
     }
 
     public class Int : Token
     {
-        public int Value;
+        public int value;
 
         public Int(int val): base(Tag.INT)
         {
-            Value = val;
+            value = val;
         }
 
-        public override string ToString()
-        {
-            return Value.ToString();
-        }
+        public override string ToString()=> value.ToString();
     }
 
     public class Word : Token
     {
-        public string Lexeme;
+        public string lexeme;
 
         public Word(string lexeme, char tag): base(tag)
         {
-            Lexeme = lexeme;
+            this.lexeme = lexeme;
         }
 
-        public override string ToString()
-        {
-            return Lexeme;
-        }
+        public override string ToString()=>lexeme;
 
         public static readonly Word
             And     = new Word("&&", Tag.AND),
@@ -94,28 +91,28 @@
 
     public class Float : Token
     {
-        public float Value;
+        public float value;
 
         public Float(float val): base(Tag.FLOAT)
         {
-            Value = val;
+            value = val;
         }
 
         public override string ToString()
         {
-            return  Value.ToString();
+            return  value.ToString(CultureInfo.InvariantCulture);
         }
     }
 
     public class String : Token
     {
-        public string Value;
+        public string value;
 
         public String(string val) : base(Tag.STRING)
         {
-            Value = val;
+            value = val;
         }
 
-        public override string ToString()=>Value;
+        public override string ToString()=>value;
     }
 }
