@@ -1,5 +1,4 @@
-﻿using System;
-using Orange.Debug;
+﻿using Orange.Debug;
 using Orange.Parse;
 using Orange.Parse.Core;
 using Orange.Tokenize;
@@ -11,10 +10,7 @@ namespace Orange
         readonly int _lexLine;
 
         public Node()=>_lexLine = Lexer.line; 
-        
-
         //public void Error(string msg) => Debug.Debugger.Error("[ERROR] line " + _lexLine + ": " + msg);
-
 
         public static Token _look => Parser.current._look;
         public static void Move() => Parser.current._look = Parser.current._lexer.Scan();

@@ -24,7 +24,7 @@ namespace Orange
             Compiler.Init();                                                                                                                    //初始化编译器
             new Parser(new Lexer(new StreamReader(path))).Analyze();                                                                            //语法词法分析
             Compiler.Generate();                                                                                                                //生成IL程序集
-
+            
             Debug.Debugger.Message("编译完成，耗时" + watch.Elapsed.TotalMilliseconds + "毫秒", ConsoleColor.Green);                              //输出计时
             Console.ReadKey();
         }

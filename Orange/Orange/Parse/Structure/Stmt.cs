@@ -10,9 +10,7 @@ namespace Orange.Parse
     {
         public static Stmt Null = new Stmt();
         public static Stmt Enclosing = Null;
-
         public virtual void Create(ILGenerator generator) { }
-
         public static Stmt Match()
         {
             switch (_look.TagValue)

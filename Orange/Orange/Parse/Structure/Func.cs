@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Reflection.Emit;
 using Orange.Parse.Core;
-using Orange.Parse.New.Statements;
 using Orange.Parse.Structure;
 using Orange.Tokenize;
 using Type = Orange.Parse.Core.Type;
@@ -75,8 +74,6 @@ namespace Orange.Parse.New.Structure
             Match(Tag.ID);
             return param;
         }
-
-
         public void Create(Obj obj)
         {
             generator.DeclareLocal(typeof(int));
