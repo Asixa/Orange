@@ -8,13 +8,12 @@ namespace Orange.Parse.New.Operation
     {
         public LogicNode left;
         public LogicNode right;
-
         public BoolTree(Token op, LogicNode lhs, LogicNode rhs) : base(op, null)
         {
             left = lhs;
             right = rhs;
             Type = Check(lhs.Type,rhs.Type);
-            if (Type==null)Error(Debugger.Errors.TypeError+"1:"+lhs.Type+" - "+rhs.Type);
+            if (Type==null)Error(Debugger.Errors.TypeError);
         }
         protected Type Check(Type lft, Type rht)
         {
@@ -22,7 +21,7 @@ namespace Orange.Parse.New.Operation
             {
                 case Tag.OR:
                 case Tag.AND: return (lft == Type.Bool && rht == Type.Bool) ? Type.Bool : null;
-                default: return lft == rht ? Type.Bool : null;//如果两遍类型相等而返回布尔表达式
+                default: return lft == rht ? Type.Bool : null;
             }
         }
         public override string ToString() => left + " " + Op + " " + right;

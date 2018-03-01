@@ -8,13 +8,11 @@ namespace Orange.Parse.New.Operation
     {
         public Token Op { get; set; }
         public Type Type { get; set; }
-
         public LogicNode(Token tok, Type type)
         {
             Op = tok;
             Type = type;
         }
-
         public override string ToString() => Op.ToString();
         public delegate LogicNode Rule();
         public static LogicNode MatchTemplate<T>(Rule rule, char[] operators, bool loop = true) where T : LogicNode

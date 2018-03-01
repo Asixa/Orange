@@ -8,40 +8,23 @@ namespace Orange.Parse.New.Operation
     {
         public Factor(Token tok, Type type) : base(tok, type){}
         public Factor(int i) : base(new Int(i), Type.Int){ }
-
         public static readonly Factor
             True = new Factor(Word.True, Type.Bool),
             False = new Factor(Word.False, Type.Bool);
-
         public static LogicNode Match()
         {
             LogicNode factor;
             switch (_look.TagValue)
             {
+                case Tag.INT:factor=new Factor(_look,Type.Int);break;
+                case Tag.FLOAT:factor = new Factor(_look, Type.Float);break;
+                case Tag.TRUE:factor = True;break;
+                case Tag.FALSE: factor = False;break;
+                case Tag.STRING:factor = new Factor(_look,Type.String);break;
                 case '(':
                     Move();
-                    factor = BoolTree.Match(); //最高表达式形态
+                    factor = BoolTree.Match();
                     Match(')');
-                    return factor;
-                case Tag.INT:
-                    factor=new Factor(_look,Type.Int);
-                    Move();
-                    return factor;
-                case Tag.FLOAT:
-                    factor = new Factor(_look, Type.Float);
-                    Move();
-                    return factor;
-                case Tag.TRUE:
-                    factor = True;
-                    Move();
-                    return factor;
-                case Tag.FALSE:
-                    factor = False;
-                    Move();
-                    return factor;
-                case Tag.STRING:
-                    factor = new Factor(_look,Type.String);
-                    Move();
                     return factor;
                 case Tag.ID:
                     var tok = _look;
@@ -55,6 +38,8 @@ namespace Orange.Parse.New.Operation
                     Error(Debugger.Errors.GrammarError+" "+_look);
                     return null;
             }
+            Move();
+            return factor;
         }
     }
 }
