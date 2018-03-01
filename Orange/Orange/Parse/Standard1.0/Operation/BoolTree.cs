@@ -29,39 +29,5 @@ namespace Orange.Parse.New.Operation
         public static LogicNode Match() => MatchTemplate<BoolTree>(MatchSingleBool, new[] { Tag.OR, Tag.AND });
         public static LogicNode MatchSingleBool() => MatchTemplate<BoolTree>(MatchCompare, new[] { Tag.EQ, Tag.NE });
         private static LogicNode MatchCompare() => MatchTemplate<BoolTree>(MathTree.Match, new[] { '<', '>', Tag.LE, Tag.GE }, false);
-        
-        public static LogicNode Match2()
-        {
-            var expr = MatchSingleBool();
-            while (_look.TagValue == Tag.OR||_look.TagValue==Tag.AND)
-            {
-                var tok = _look;
-                Move();
-                expr = new BoolTree(tok,expr, MatchSingleBool());
-            }
-            return expr;
-        }
-        public static LogicNode MatchSingleBool2()
-        {
-            var expr = MatchCompare();
-            while (_look.TagValue == Tag.EQ || _look.TagValue == Tag.NE)
-            {
-                var tok = _look;
-                Move();
-                expr = new BoolTree(tok, expr, MatchCompare());
-            }
-            return expr;
-        } 
-        private static LogicNode MatchCompare2()
-        {
-            var expr = MathTree.Match();
-            if (_look.TagValue != '<' &&
-                _look.TagValue != Tag.LE &&
-                _look.TagValue != Tag.GE &&
-                _look.TagValue != '>')return expr; 
-            var tok = _look;
-            Move();
-            return new BoolTree(tok,expr, MathTree.Match());
-        }
     }
 }
