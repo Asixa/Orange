@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using Orange.Debug;
 using Orange.Parse.Core;
 using Orange.Parse.New.Operation;
-using Orange.Tokenize;
 using Type = Orange.Parse.Core.Type;
 
 namespace Orange.Parse.New.Statements
@@ -60,16 +58,16 @@ namespace Orange.Parse.New.Statements
             else                                                                                        //如果匹配到的的标识符不是本地函数
             {
                 MethodInfo method;
-                var split = function.name.Split('.');                                                  //分割标识符
+                var split = function.name.Split('.');                                                   //分割标识符
                 MethodName = split[split.Length - 1];                                                   //方法名称为标识符最后一个元素
                 typeName = split.Length == 1 ? "" : function.type.name_space +
-                    "." + function.name.Substring(0, function.name.LastIndexOf("."));                 //类型名称为除了最后一个元素的其他元素
+                    "." + function.name.Substring(0, function.name.LastIndexOf("."));                   //类型名称为除了最后一个元素的其他元素
                 if (_params.Count != 0)                                                                 //如果这个函数有参数
                 {
                     generator.Emit(OpCodes.Ldstr, _params[0].ToString());                               //TODO 将String参数值置入栈中
 
                     var param = new System.Type[_params.Count];                                         //参数类型数组
-                    for (var i = 0; i < param.Length; i++) param[i] = _params[i].Type.system;       //将_param数组转换为系统类型数组
+                    for (var i = 0; i < param.Length; i++) param[i] = _params[i].Type.system;           //将_param数组转换为系统类型数组
                     method = System.Type.GetType(typeName)?.GetMethod(MethodName, param);               //获取目标类型
                 }
                 else

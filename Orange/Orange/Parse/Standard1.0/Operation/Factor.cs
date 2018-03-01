@@ -1,5 +1,4 @@
-﻿using System;
-using Orange.Debug;
+﻿using Orange.Debug;
 using Orange.Tokenize;
 using Type = Orange.Parse.Core.Type;
 
@@ -51,7 +50,7 @@ namespace Orange.Parse.New.Operation
                     if (variable == null)
                         Error(_look + Debugger.Errors.UnknownVariable);
                     Move();
-                    return new Factor(tok, identitifer.check());
+                    return new Factor(tok, identitifer.Check());
                 default:
                     Error(Debugger.Errors.GrammarError+" "+_look);
                     return null;

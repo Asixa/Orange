@@ -9,13 +9,14 @@ namespace Orange.Parse.New.Operation
         public LogicNode Expr { get; }
         public Unary(Token tok, LogicNode expr) : base(tok, Type.Max(Type.Int, expr.Type))
         {
-            if (Type == null)Error(Debugger.Errors.TypeError);
+            if (Type == null)Error(Debugger.Errors.TypeError+"3");
             Expr = expr;
         }
         public override string ToString() => Op+ " " + Expr;
 
         public static LogicNode Match()
         {
+
             switch (_look.TagValue)
             {
                 case '-':

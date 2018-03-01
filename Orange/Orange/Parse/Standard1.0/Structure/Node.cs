@@ -21,7 +21,7 @@ namespace Orange
         public static void Match(int tag)
         {
             if (_look.TagValue == tag) Move();
-            else Error(Debugger.Errors.GrammarError +": "+ _look.TagValue + " "+Debugger.Errors.ShouldBe+" " + (char)tag);
+            else Error(Debugger.Errors.GrammarError +": "+ _look + " "+Debugger.Errors.ShouldBe+" " + (char)tag);
         }
         public static Env Top => Parser.current.Top;
         public static Snippet snippet => Parser.current.snippet;

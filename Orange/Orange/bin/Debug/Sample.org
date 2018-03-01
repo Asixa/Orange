@@ -10,11 +10,10 @@ namespace HelloWorld->obj Program
 		func Print(|)
 		{
 			def string txt;
-			txt="SampleTitle";
+			let txt="SampleTitle";
 			let Console.Title = txt;
 			Console.WriteLine<<"HelloWorld";
 			Console.ReadLine<<#;
 		}
 	}
 ;
-

@@ -57,9 +57,9 @@ namespace Orange.Parse.New.Structure
 
             //声明一个空的函数
             var param = new System.Type[function._params.Count];
-            for (var i = 0; i < function._params.Count; i++) param[i] = function._params[i].type.check().SystemType;
+            for (var i = 0; i < function._params.Count; i++) param[i] = function._params[i].type.Check().system;
             function.builder = obj.builder.DefineMethod(function.name, MethodAttributes.Static | MethodAttributes.Public,
-                function.returnType.check().SystemType, param);
+                function.returnType.Check().system, param);
             function.generator = function.builder.GetILGenerator();
             function.generator.Emit(OpCodes.Nop);
 

@@ -16,7 +16,7 @@ namespace Orange.Tokenize
             ID      = (char)264,
             IF      = (char)265,
             INDEX   = (char)266,    //used in syntax tree
-            LE      = (char)267,    //used in syntax tree
+            LE      = (char)267, 
             MINUS   = (char)268,    
             NE      = (char)269,
             INT     = (char)270,

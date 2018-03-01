@@ -1,4 +1,5 @@
-﻿using System.Reflection.Emit;
+﻿using System;
+using System.Reflection.Emit;
 using Orange.Debug;
 using Orange.Parse.Core;
 using Orange.Parse.New.Operation;
@@ -40,7 +41,7 @@ namespace Orange.Parse.Standard1._0.Statements
             var split = target.name.Split('.');                                                 //分割被赋值标识符
             FieldName = split[split.Length - 1];                                                //字段名称为标识符最后一个元素
             typeName = target.type.name_space + "." +                                           //类型名称为标识符除了最后以外的其他元素
-                target.name.Substring(0, target.name.LastIndexOf("."));
+                target.name.Substring(0, target.name.LastIndexOf(".", StringComparison.Ordinal));
 
             var type = System.Type.GetType(typeName);
             var field = type.GetField(FieldName);
