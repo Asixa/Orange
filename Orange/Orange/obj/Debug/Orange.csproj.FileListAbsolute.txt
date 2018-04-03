@@ -1,8 +1,0 @@
-E:\Programing\C#\编译原理\Orange\Orange\Orange\bin\Debug\Sample.org
-E:\Programing\C#\编译原理\Orange\Orange\Orange\bin\Debug\Orange.exe.config
-E:\Programing\C#\编译原理\Orange\Orange\Orange\bin\Debug\Orange.exe
-E:\Programing\C#\编译原理\Orange\Orange\Orange\bin\Debug\Orange.pdb
-E:\Programing\C#\编译原理\Orange\Orange\Orange\obj\Debug\Orange.csproj.CoreCompileInputs.cache
-E:\Programing\C#\编译原理\Orange\Orange\Orange\obj\Debug\Orange.exe
-E:\Programing\C#\编译原理\Orange\Orange\Orange\obj\Debug\Orange.pdb
-E:\Programing\C#\编译原理\Orange\Orange\Orange\obj\Debug\Orange.csprojResolveAssemblyReference.cache
