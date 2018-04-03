@@ -3,10 +3,10 @@ using System.Reflection;
 using System.Reflection.Emit;
 using Orange.Debug;
 using Orange.Parse.Core;
-using Orange.Parse.New.Operation;
+using Orange.Parse.Operation;
 using Type = Orange.Parse.Core.Type;
 
-namespace Orange.Parse.New.Statements
+namespace Orange.Parse.Statements
 {
     public class FuncCall : Stmt
     {
@@ -23,7 +23,7 @@ namespace Orange.Parse.New.Statements
             };
             Match('<');
             Match('<');
-            if (_look.TagValue == '#')
+            if (_look.tag_value == '#')
             {
                 Match('#');
                 Match(';');
@@ -32,7 +32,7 @@ namespace Orange.Parse.New.Statements
             }
 
             func_call._params = new List<LogicNode> {BoolTree.Match()};
-            while (_look.TagValue==',')
+            while (_look.tag_value==',')
             {
                 Match(',');
                 func_call._params.Add(BoolTree.Match());

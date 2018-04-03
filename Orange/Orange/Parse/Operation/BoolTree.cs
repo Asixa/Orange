@@ -2,12 +2,12 @@
 using Orange.Tokenize;
 using Type = Orange.Parse.Core.Type;
 
-namespace Orange.Parse.New.Operation
+namespace Orange.Parse.Operation
 {
     public class BoolTree:LogicNode
     {
-        public LogicNode left;
-        public LogicNode right;
+        private readonly LogicNode left;
+        private readonly LogicNode right;
         public BoolTree(Token op, LogicNode lhs, LogicNode rhs) : base(op, null)
         {
             left = lhs;
@@ -15,9 +15,10 @@ namespace Orange.Parse.New.Operation
             Type = Check(lhs.Type,rhs.Type);
             if (Type==null)Error(Debugger.Errors.TypeError);
         }
-        protected Type Check(Type lft, Type rht)
+
+        private Type Check(Type lft, Type rht)
         {
-            switch (Op.TagValue)
+            switch (Op.tag_value)
             {
                 case Tag.OR:
                 case Tag.AND: return (lft == Type.Bool && rht == Type.Bool) ? Type.Bool : null;
@@ -26,7 +27,7 @@ namespace Orange.Parse.New.Operation
         }
         public override string ToString() => left + " " + Op + " " + right;
         public static LogicNode Match() => MatchTemplate<BoolTree>(MatchSingleBool, new[] { Tag.OR, Tag.AND });
-        public static LogicNode MatchSingleBool() => MatchTemplate<BoolTree>(MatchCompare, new[] { Tag.EQ, Tag.NE });
+        private static LogicNode MatchSingleBool() => MatchTemplate<BoolTree>(MatchCompare, new[] { Tag.EQ, Tag.NE });
         private static LogicNode MatchCompare() => MatchTemplate<BoolTree>(MathTree.Match, new[] { '<', '>', Tag.LE, Tag.GE }, false);
     }
 }

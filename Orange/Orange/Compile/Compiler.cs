@@ -6,14 +6,14 @@ using Orange.Parse;
 
 namespace Orange.Compile
 {
-    class Compiler
+    internal class Compiler
     {
         public class CompileSetting
         {
-            public string AssemblyName, ModuleName;
+            public string assembly_name, module_name;
         }
-        public static CompileSetting setting=new CompileSetting();                  //编译器设置
-        public static List<string>dlls=new List<string>();                          //所有添加的dll
+        public static readonly CompileSetting Setting=new CompileSetting();                  //编译器设置
+        public static readonly List<string>Dlls=new List<string>();                          //所有添加的dll
 
         public static AssemblyBuilder assembly;                                     //生成的程序集
         public static ModuleBuilder module;                                         //module
@@ -21,19 +21,19 @@ namespace Orange.Compile
         public static void Init()
         {
             assembly = AppDomain.CurrentDomain.DefineDynamicAssembly(
-                new AssemblyName(setting.AssemblyName),
+                new AssemblyName(Setting.assembly_name),
                 AssemblyBuilderAccess.RunAndSave);                                  //创建程序集
             
             module = assembly.DefineDynamicModule(
-                setting.ModuleName,
-                setting.AssemblyName + ".exe");                                     //定义模块
+                Setting.module_name,
+                Setting.assembly_name + ".exe");                                     //定义模块
         }
         public static void Generate()
         {
-            foreach (var snippet in Parser.snippets)
+            foreach (var snippet in Parser.Snippets)
             foreach (var name_space in snippet.namespace_define)
                 name_space.Create();                                                //遍历所有声明的命名空间结构，生成IL
-            assembly.Save(setting.AssemblyName + ".exe");                           //将程序集保存
+            assembly.Save(Setting.assembly_name + ".exe");                           //将程序集保存
         }
     }
 }

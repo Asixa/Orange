@@ -35,7 +35,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>0</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -61,26 +61,26 @@
   <ItemGroup>
     <Compile Include="Compile\Compiler.cs" />
     <Compile Include="Debug\Debugger.cs" />
-    <Compile Include="Parse\Standard1.0\Statements\Let.cs" />
-    <Compile Include="Parse\Standard1.0\Operation\BoolTree.cs" />
-    <Compile Include="Parse\Standard1.0\Operation\LogicNode.cs" />
-    <Compile Include="Parse\Standard1.0\Operation\Factor.cs" />
-    <Compile Include="Parse\Standard1.0\Operation\MathTree.cs" />
-    <Compile Include="Parse\Standard1.0\Operation\Unary.cs" />
-    <Compile Include="Parse\Standard1.0\Statements\Variable.cs" />
-    <Compile Include="Parse\Standard1.0\Structure\Core\NameSpace.cs" />
-    <Compile Include="Parse\Standard1.0\Structure\Core\Obj.cs" />
-    <Compile Include="Parse\Standard1.0\Structure\Core\Func.cs" />
-    <Compile Include="Parse\Standard1.0\Structure\Quote.cs" />
+    <Compile Include="Parse\Statements\Let.cs" />
+    <Compile Include="Parse\Operation\BoolTree.cs" />
+    <Compile Include="Parse\Operation\LogicNode.cs" />
+    <Compile Include="Parse\Operation\Factor.cs" />
+    <Compile Include="Parse\Operation\MathTree.cs" />
+    <Compile Include="Parse\Operation\Unary.cs" />
+    <Compile Include="Parse\Statements\Variable.cs" />
+    <Compile Include="Parse\Structure\NameSpace.cs" />
+    <Compile Include="Parse\Structure\Obj.cs" />
+    <Compile Include="Parse\Structure\Func.cs" />
+    <Compile Include="Parse\Structure\Quote.cs" />
     <Compile Include="Parse\Core\Snippet.cs" />
-    <Compile Include="Parse\Standard1.0\Structure\Block.cs" />
-    <Compile Include="Parse\Standard1.0\Statements\FuncCall.cs" />
+    <Compile Include="Parse\Structure\Block.cs" />
+    <Compile Include="Parse\Statements\FuncCall.cs" />
     <Compile Include="Tokenize\Lexer.cs" />
-    <Compile Include="Parse\Standard1.0\Structure\Node.cs" />
+    <Compile Include="Parse\Structure\Node.cs" />
     <Compile Include="Parse\Core\Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Parse\Standard1.0\Structure\Stmt.cs" />
+    <Compile Include="Parse\Structure\Stmt.cs" />
     <Compile Include="Parse\Core\Type.cs" />
     <Compile Include="Tokenize\Token.cs" />
   </ItemGroup>

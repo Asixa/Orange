@@ -2,12 +2,12 @@
 using Orange.Parse.Core;
 using Orange.Tokenize;
 
-namespace Orange.Parse.New.Operation
+namespace Orange.Parse.Operation
 {
     public class MathTree:LogicNode
     {
-        public LogicNode left;
-        public LogicNode right;
+        private readonly LogicNode left;
+        private readonly LogicNode right;
         public MathTree(Token op, LogicNode lhs, LogicNode rhs) : base(op, null)
         {
             left = lhs;
@@ -16,7 +16,7 @@ namespace Orange.Parse.New.Operation
             if (Type == null)Error(Debugger.Errors.TypeError);
         }
         public override string ToString()=>left + " " + Op+ " " + right;
-        public static LogicNode Match() => MatchTemplate<MathTree>(Match_Mul_Div, new[] { '+', '-' });
-        public static LogicNode Match_Mul_Div() => MatchTemplate<MathTree>(Unary.Match, new[] { '*', '/' });
+        public static LogicNode Match() => MatchTemplate<MathTree>(Match_MD, new[] { '+', '-' });
+        private static LogicNode Match_MD() => MatchTemplate<MathTree>(Unary.Match, new[] { '*', '/' });
     }
 }

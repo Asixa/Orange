@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Reflection.Emit;
 using Orange.Compile;
-using Orange.Parse.New.Structure;
 using Orange.Tokenize;
 
 namespace Orange.Parse.Structure
@@ -27,7 +26,7 @@ namespace Orange.Parse.Structure
             //生成一个类
             obj.builder = Compiler.module.DefineType(name_space.name +"."+ obj.name, TypeAttributes.Public);
 
-            while (_look.TagValue==Tag.FUNC)obj.functions.Add(Func.Match(obj));   
+            while (_look.tag_value==Tag.FUNC)obj.functions.Add(Func.Match(obj));   
             Match('}');
             return obj;
         }

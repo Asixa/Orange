@@ -1,19 +1,12 @@
-import<System,System.IO>  
+(1+2)*3/(4-5)>0||1*2-3/4==-1&&(true)||(false)&&
+(1+2)*3/(4-5)>0||1*2-3/4==-1&&(true)||(false)&&
+(1+2)*3/(4-5)>0||1*2-3/4==-1&&(true)||(false)&&
+(1+2)*3/(4-5)>0||1*2-3/4==-1&&(true)||(false)&&
+(1+2)*3/(4-5)>0||1*2-3/4==-1&&(true)||(false)&&
+(1+2)*3/(4-5)>0||1*2-3/4==-1&&(true)||(false)&&
+(1+2)*3/(4-5)>0||1*2-3/4==-1&&(true)||(false)&&
+(1+2)*3/(4-5)>0||1*2-3/4==-1&&(true)||(false)&&
+(1+2)*3/(4-5)>0||1*2-3/4==-1&&(true)||(false)&&
+(1+2)*3/(4-5)>0||1*2-3/4==-1&&(true)||(false)
 
-namespace HelloWorld->obj Program
-	{
-		func Main(|)
-		{
-			Print<<#;
-		}
-
-		func Print(|)
-		{
-			def string txt;
-			let txt="SampleTitle";
-			let Console.Title = txt;
-			Console.WriteLine<<"HelloWorld";
-			Console.ReadLine<<#;
-		}
-	}
 ;

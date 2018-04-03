@@ -2,19 +2,20 @@
 using Orange.Tokenize;
 using Type = Orange.Parse.Core.Type;
 
-namespace Orange.Parse.New.Operation
+namespace Orange.Parse.Operation
 {
     public class Factor:LogicNode
     {
-        public Factor(Token tok, Type type) : base(tok, type){}
+        private Factor(Token tok, Type type) : base(tok, type){}
         public Factor(int i) : base(new Int(i), Type.Int){ }
-        public static readonly Factor
-            True = new Factor(Word.True, Type.Bool),
-            False = new Factor(Word.False, Type.Bool);
+
+        private static readonly Factor
+            True = new Factor(Word.True, Type.Bool),False = new Factor(Word.False, Type.Bool);
+
         public static LogicNode Match()
         {
             LogicNode factor;
-            switch (_look.TagValue)
+            switch (_look.tag_value)
             {
                 case Tag.INT:factor=new Factor(_look,Type.Int);break;
                 case Tag.FLOAT:factor = new Factor(_look, Type.Float);break;

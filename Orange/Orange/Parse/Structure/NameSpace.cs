@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using Orange.Parse.Structure;
 using Orange.Tokenize;
 
-namespace Orange.Parse.New.Structure
+namespace Orange.Parse.Structure
 {
     public class NameSpace:Stmt
     {
@@ -15,7 +14,7 @@ namespace Orange.Parse.New.Structure
             Match(Tag.NAMESPACE);
             space.name = _look.ToString();
             Match(Tag.ID);
-            if (_look.TagValue == '-')
+            if (_look.tag_value == '-')
             {
                 Match('-');
                 Match('>');
@@ -24,7 +23,7 @@ namespace Orange.Parse.New.Structure
             else
             {
                 Match('{');
-                while (_look.TagValue == Tag.OBJ) space.objs.Add(Obj.Match(space));
+                while (_look.tag_value == Tag.OBJ) space.objs.Add(Obj.Match(space));
                 Match('}');
             }
             return space;

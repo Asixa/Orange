@@ -2,11 +2,11 @@
 using System.Reflection.Emit;
 using Orange.Debug;
 using Orange.Parse.Core;
-using Orange.Parse.New.Operation;
+using Orange.Parse.Operation;
 using Orange.Tokenize;
 using Type = Orange.Parse.Core.Type;
 
-namespace Orange.Parse.Standard1._0.Statements
+namespace Orange.Parse.Statements
 {
     public class Let : Stmt
     {

@@ -1,7 +1,7 @@
 ﻿using System.Reflection.Emit;
 using Orange.Tokenize;
 
-namespace Orange.Parse.New.Statements
+namespace Orange.Parse.Statements
 {
     public class Variable : Stmt
     {
@@ -25,7 +25,7 @@ namespace Orange.Parse.New.Statements
             Match(';');
             var id = new Variable(tok.ToString(), identitifer.Check());
         //    Top.AddIdentifier(tok, id);
-            Parser.current.Used += identitifer.type.width;
+            Parser.current.used += identitifer.type.width;
             return id;
         }
 

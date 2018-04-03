@@ -7,10 +7,10 @@ namespace Orange.Parse.Statements
         {
             Match('[');
             var saved_env = Top;
-            Parser.current.Top = new Env(Top);
+            Parser.current.top = new Env(Top);
             var stmt =Stmts.Match();
             Match(']');
-            Parser.current.Top = saved_env;
+            Parser.current.top = saved_env;
             return stmt;
         }
     }

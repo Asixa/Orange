@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Orange.Debug;
-using Orange.Parse.New.Statements;
-using Orange.Parse.New.Structure;
+using Orange.Parse.Statements;
+using Orange.Parse.Structure;
 using Orange.Tokenize;
 
 namespace Orange.Parse.Core
@@ -9,7 +9,7 @@ namespace Orange.Parse.Core
     public class Env
     {
         private readonly Dictionary<Token, Variable> symbol_table;
-        protected Env prev;
+        private readonly Env prev;
 
         public Env(Env prev)
         {
@@ -32,8 +32,8 @@ namespace Orange.Parse.Core
 
     public class Type : Word
     {
-        public int width;
-        public System.Type system;
+        public readonly int width;
+        public readonly System.Type system;
         public string name_space;
 
         public Type(string type_name, char tag, int width,System.Type t): base(type_name, tag) 
@@ -50,11 +50,8 @@ namespace Orange.Parse.Core
             Bool    =   new Type("bool",    Tag.BASIC, 1,typeof(bool)),
             String  =   new Type("string",  Tag.BASIC,1,typeof(string));
 
-        public static bool Numeric(Type type) 
-        {
-            return type == Char || type == Int || type == Float; 
-        }
-
+        private static bool Numeric(Type type) =>type == Char || type == Int || type == Float; 
+        
         public static Type Max(Type lhs, Type rhs)
         {
             if (lhs == String || rhs == String)return String;
@@ -71,12 +68,12 @@ namespace Orange.Parse.Core
         public static Identitifer Match()//可返回类型，也可返回字段，也可返回属性
         {
             var identitifer=new Identitifer();
-            if (Node._look.TagValue == Tag.BASIC)
+            if (Node._look.tag_value == Tag.BASIC)
             {
                 identitifer.element.Add(Node._look.ToString());
                 identitifer.type = Node._look as Type;
                 identitifer.Checked = true;
-                identitifer.isType = true;
+                identitifer.is_type = true;
                 Node.Match(Tag.BASIC);
             }
             else
@@ -84,7 +81,7 @@ namespace Orange.Parse.Core
                 identitifer.element.Add(Node._look.ToString());
                 Node.Match(Tag.ID);
 
-                while (Node._look.TagValue == '.')
+                while (Node._look.tag_value == '.')
                 {
                     Node.Match('.');
                     identitifer.element.Add(Node._look.ToString());
@@ -103,7 +100,7 @@ namespace Orange.Parse.Core
             Node.Match(Tag.INT);
             Node.Match(']');
 
-            if (Node._look.TagValue == '[')
+            if (Node._look.tag_value == '[')
                 type = Dimension(type);
             return null;
             //return new Array(((Int)tok).Value, type);
@@ -114,14 +111,14 @@ namespace Orange.Parse.Core
 
     public class Identitifer
     {
-        public bool isType,Checked;
+        public bool is_type,Checked;
         public string name;
         public Type type;
-        public List<string> element=new List<string>();                                                 //存着的所有段
+        public readonly List<string> element=new List<string>();                                                 //存着的所有段
        
 
         public object reflect;                                                                          // 这个存个奇怪的东西，有时候会用到
-        public override string ToString() => "[" + name + "," + (isType ? "类型" : "非类型") + "," + type.system+"]";
+        public override string ToString() => "[" + name + "," + (is_type ? "类型" : "非类型") + "," + type.system+"]";
 
         public Type Check()
         {
@@ -157,7 +154,7 @@ namespace Orange.Parse.Core
                     }
 
                     type = new Type(name, Tag.BASIC, 4, father) { name_space = _namespace };
-                    isType = System.Type.GetType(_namespace + "." + name) != null;
+                    is_type = System.Type.GetType(_namespace + "." + name) != null;
                     Checked = true;
                     break;
                 default:
@@ -172,7 +169,7 @@ namespace Orange.Parse.Core
             OUT = null;
                                                                              //TODO 检查是不是变量           return 1;
                                                                            
-            foreach (var snippet in Parser.snippets)                         //检查是不是本地函数            return 3;
+            foreach (var snippet in Parser.Snippets)                         //检查是不是本地函数            return 3;
             {
                 foreach (var name_space in snippet.namespace_define)
                 {

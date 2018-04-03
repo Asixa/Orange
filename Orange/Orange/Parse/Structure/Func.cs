@@ -6,7 +6,7 @@ using Orange.Parse.Structure;
 using Orange.Tokenize;
 using Type = Orange.Parse.Core.Type;
 
-namespace Orange.Parse.New.Structure
+namespace Orange.Parse.Structure
 {
     public class Func:Stmt
     {
@@ -33,16 +33,16 @@ namespace Orange.Parse.New.Structure
             Match(Tag.ID);
             Match('(');
             
-            if (_look.TagValue == Tag.BASIC || _look.TagValue == Tag.ID)
+            if (_look.tag_value == Tag.BASIC || _look.tag_value == Tag.ID)
             {
                 function.returnType =Type.Match();
             }
             else function.returnType=new Identitifer{Checked = true,type = Type.Void};
             Match('|');
-            if (_look.TagValue == Tag.BASIC || _look.TagValue == Tag.ID)
+            if (_look.tag_value == Tag.BASIC || _look.tag_value == Tag.ID)
             {
                 function._params.Add(match_param());
-                while(_look.TagValue == ',')
+                while(_look.tag_value == ',')
                 {
                     Match(',');
                     function._params.Add(match_param());

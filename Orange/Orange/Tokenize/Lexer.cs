@@ -4,18 +4,18 @@ using System.IO;
 using System.Text;
 using Orange.Debug;
 using Type = Orange.Parse.Core.Type;
-
+// ReSharper disable InconsistentNaming
 namespace Orange.Tokenize
 {
     public class Lexer
     {
-        public StreamReader reader;
+        private readonly StreamReader reader;
         private char peek = ' ';
-        public bool EofReached { get; private set; }
+        private bool EofReached { get; set; }
         public static int line = 1;
-        public Dictionary<string, Word> KeyWords = new Dictionary<string, Word>();
+        private readonly Dictionary<string, Word> key_words = new Dictionary<string, Word>();
 
-        private void Reserve(Word word)=>KeyWords.Add(word.lexeme, word);
+        private void Reserve(Word word)=>key_words.Add(word.lexeme, word);
         
         public Lexer(StreamReader reader)
         {
@@ -23,27 +23,23 @@ namespace Orange.Tokenize
             Reserve();
         }
 
-        public void Error(string msg) => Debugger.Error(Debugger.Errors.Error+Debugger.Errors.Line+ ": " + msg);
+        private static void Error(string msg) => Debugger.Error(Debugger.Errors.Error+Debugger.Errors.Line+ ": " + msg);
 
-        private bool ReadChar()
+        private void ReadChar()
         {
             try
             {
                 if (-1 == reader.Peek())
                 {
                     EofReached = true;
-                    return false;
+                    return;
                 }
-
                 peek = (char) reader.Read();
-                return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Debugger.Message(e.Message,ConsoleColor.Blue);
             }
-
-            return true;
         }
 
         private bool ReadChar(char ch)
@@ -57,65 +53,48 @@ namespace Orange.Tokenize
 
         public Token Scan()
         {
-            for (; !EofReached; ReadChar())//去除空白
+            //去除空白
+            for (; !EofReached; ReadChar())
             {
-                if (peek == ' ' || peek == '\t')
-                {
-                }
+                if (peek == ' ' || peek == '\t'){}
                 else if (peek == '\r')
                 {
                     ReadChar();
                     ++line;
                 }
-                else
-                    break;
+                else break;
             }
-
             if (EofReached) return null;
 
-            if (peek == '/') //检测注释
+            //检测注释
+            if (peek == '/') 
             {
                 ReadChar();
-                if (peek == '/')
+                switch (peek)
                 {
-                    for (; ; ReadChar())
-                    {
-                        switch (peek)
+                    case '/': for (; ; ReadChar()) if (peek == '\r' || peek == '\uffff') return Scan();
+                    case '*':
+                        for (ReadChar(); ; ReadChar())
                         {
-                            case '\r':
-                            case '\uffff':
-                                return Scan();
-                            default:
-                                break;
-                        }
-                    }
-                }
-                if (peek == '*')
-                {
-                    ReadChar();
-                    for (; ; ReadChar())
-                    {
-                        if (peek == '\r')
-                        {
-                            line++;
-                            ReadChar();
-                        }
-                        if (peek == '*')
-                        {
-                            ReadChar();
-                            if (peek == '/')
+                            switch (peek)
                             {
-                                ReadChar();
-                                return Scan();
+                                case '\r':
+                                    line++;
+                                    ReadChar();
+                                    break;
+                                case '*':
+                                    ReadChar();
+                                    if (peek == '/')
+                                    {
+                                        ReadChar();
+                                        return Scan();
+                                    }
+                                    break;
+                                case '\uffff':
+                                    return Scan();
                             }
                         }
-                        if (peek == '\uffff')
-                        {
-                            return Scan();
-                        }
-                    }
                 }
-                
                 return new Token('/');
             }
 
@@ -134,57 +113,48 @@ namespace Orange.Tokenize
                     return ReadChar('=') ? Word.Less : new Token('<');
                 case '>':
                     return ReadChar('=') ? Word.Greater : new Token('>');
-            }
-
-            if (peek == '"')//分析字符串
-            {
-                var s = "";
-                ReadChar();
-                for (; ; ReadChar())
-                {
-                    switch (peek)
-                    {
-                        case '"':
-                        {
-                            ReadChar();
-                            return new String(s);
-                        }
-                        case '\n':
-                        {
-                            Error("应输入\"\"\"");
-                            ReadChar();
-                            return new String(s);
-                        }
-                        default:
-                            break;
-                    }
-                    s = s + peek;
-                }
-            }
-
-            if (char.IsDigit(peek))//分析数字
-            {
-                var v = 0;
-                do
-                {
-                    v = 10 * v + (peek - '0');
+                case '"':
+                    var s = "";
                     ReadChar();
-                } while (char.IsDigit(peek));
+                    for (; ; ReadChar())
+                    {
+                        switch (peek)
+                        {
+                            case '"':
+                            {
+                                ReadChar();
+                                return new String(s);
+                            }
+                            case '\n':
+                            {
+                                Error("应输入\"\"\"");
+                                ReadChar();
+                                return new String(s);
+                            }
+                        }
+                        s = s + peek;
+                    }
+            }
 
-                if (peek != '.') return new Int(v);
+            //分析数字
+            if (char.IsDigit(peek))
+            {
+                var val = 0;
+                do{val = 10 * val + (peek - '0');ReadChar();} while (char.IsDigit(peek));
+                if (peek != '.') return new Int(val);
 
-                float f = v;
+                float float_val = val;
                 for (float d = 10;; d *= 10)
                 {
                     ReadChar();
                     if (!char.IsDigit(peek)) break;
-                    f += (peek - 48) / d;
+                    float_val += (peek - 48) / d;
                 }
-
-                return new Float(f);
+                return new Float(float_val);
             }
 
-            if (char.IsLetter(peek))//分析标识符
+            //分析标识符
+            if (char.IsLetter(peek))
             {
                 var b = new StringBuilder();
                 do
@@ -194,11 +164,11 @@ namespace Orange.Tokenize
                 } while (char.IsLetterOrDigit(peek));
 
                 var s = b.ToString();
-                if (KeyWords.ContainsKey(s)) return KeyWords[s];
-                return KeyWords[s] = new Word(s, Tag.ID);
+                if (key_words.ContainsKey(s)) return key_words[s];
+                return key_words[s] = new Word(s, Tag.ID);
             }
-
-            if(peek=='/')Console.WriteLine("wc");
+            
+            //其他符合
             var tok = new Token(peek);
             if (!EofReached) peek = ' ';
             return tok;
@@ -220,7 +190,6 @@ namespace Orange.Tokenize
             Reserve(new Word("def",Tag.DEF));
             Reserve(new Word("import",Tag.IMPORT));
             Reserve(new Word("namespace",Tag.NAMESPACE));
-            Reserve(new Word("call",Tag.CALL));
             Reserve(Word.True);
             Reserve(Word.False);
             Reserve(Type.Int);
@@ -230,4 +199,102 @@ namespace Orange.Tokenize
             Reserve(Type.String);
         }
     }
+
+    public class Token
+    {
+        public readonly char tag_value;
+        public Token(char tag)
+        {
+            tag_value = tag;
+        }
+        public override string ToString() => tag_value.ToString();
+    }
+
+    public class Int : Token
+    {
+        private readonly int value;
+        public Int(int val) : base(Tag.INT)
+        {
+            value = val;
+        }
+        public override string ToString() => value.ToString();
+    }
+
+    public class Word : Token
+    {
+        public readonly string lexeme;
+        public Word(string lexeme, char tag) : base(tag)
+        {
+            this.lexeme = lexeme;
+        }
+        public override string ToString() => lexeme;
+
+        public static readonly Word
+            And = new Word("&&", Tag.AND),
+            Or = new Word("||", Tag.OR),
+            Equal = new Word("==", Tag.EQ),
+            NotEqual = new Word("!=", Tag.NE),
+            Less = new Word("<=", Tag.LE),
+            Greater = new Word(">=", Tag.GE),
+            Minus = new Word("-", Tag.MINUS),
+            True = new Word("true", Tag.TRUE),
+            False = new Word("false", Tag.FALSE),
+            Not = new Word("!", Tag.NOT);
+    }
+
+    public class Float : Token
+    {
+        private readonly float value;
+        public Float(float val) : base(Tag.FLOAT)
+        {
+            value = val;
+        }
+        public override string ToString() => value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+    }
+
+    public class String : Token
+    {
+        private readonly string value;
+        public String(string val) : base(Tag.STRING)
+        {
+            value = val;
+        }
+        public override string ToString() => value;
+    }
+}
+
+public static class Tag
+{
+    public const char
+        AND = (char) 256,
+        BASIC = (char) 257,
+        BREAK = (char) 258,
+        DO = (char) 259,
+        ELSE = (char) 260,
+        EQ = (char) 261,
+        FALSE = (char) 262,
+        GE = (char) 263,
+        ID = (char) 264,
+        IF = (char) 265,
+        INDEX = (char) 266,
+        LE = (char) 267,
+        MINUS = (char) 268,
+        NE = (char) 269,
+        INT = (char) 270,
+        OR = (char) 271,
+        FLOAT = (char) 272,
+        TEMP = (char) 273,
+        TRUE = (char) 274,
+        WHILE = (char) 275,
+        PRINT = (char) 276,
+        STRING = (char) 277,
+        PUBLIC = (char) 278,
+        PRIVATE = (char) 279,
+        OBJ = (char) 280,
+        FUNC = (char) 281,
+        NOT = (char) 282,
+        LET = (char) 283,
+        DEF = (char) 284,
+        IMPORT = (char) 285,
+        NAMESPACE = (char) 286;
 }

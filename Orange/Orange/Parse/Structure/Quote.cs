@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using Orange.Tokenize;
-namespace Orange.Parse.New.Structure
+
+namespace Orange.Parse.Structure
 {
     public class Quote:Stmt
     {
@@ -15,7 +16,7 @@ namespace Orange.Parse.New.Structure
 
         public static void GetAllAvaliableNameSpace()
         {
-            foreach (var dll in Compile.Compiler.dlls)
+            foreach (var dll in Compile.Compiler.Dlls)
             {
                 foreach (var type in Assembly.LoadFile(dll).GetTypes())
                 {
@@ -50,7 +51,7 @@ namespace Orange.Parse.New.Structure
             Match(Tag.IMPORT);
             Match('<');
             snippet.include.Add(new Quote(MatchSingleNamespace()));
-            while (_look.TagValue==',')
+            while (_look.tag_value==',')
             {
                 Match(',');
                 snippet.include.Add(new Quote(MatchSingleNamespace()));
@@ -61,7 +62,7 @@ namespace Orange.Parse.New.Structure
         {
             var _namespace = _look.ToString();
             Match(Tag.ID);
-            while (_look.TagValue == '.')
+            while (_look.tag_value == '.')
             {
                 Move();
                 _namespace += "." + _look;

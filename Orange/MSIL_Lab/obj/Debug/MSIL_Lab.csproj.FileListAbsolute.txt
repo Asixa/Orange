@@ -1,7 +1,0 @@
-E:\Programing\C#\编译原理\Orange\Orange\MSIL_Lab\bin\Debug\MSIL_Lab.exe.config
-E:\Programing\C#\编译原理\Orange\Orange\MSIL_Lab\bin\Debug\MSIL_Lab.exe
-E:\Programing\C#\编译原理\Orange\Orange\MSIL_Lab\bin\Debug\MSIL_Lab.pdb
-E:\Programing\C#\编译原理\Orange\Orange\MSIL_Lab\obj\Debug\MSIL_Lab.csprojResolveAssemblyReference.cache
-E:\Programing\C#\编译原理\Orange\Orange\MSIL_Lab\obj\Debug\MSIL_Lab.csproj.CoreCompileInputs.cache
-E:\Programing\C#\编译原理\Orange\Orange\MSIL_Lab\obj\Debug\MSIL_Lab.exe
-E:\Programing\C#\编译原理\Orange\Orange\MSIL_Lab\obj\Debug\MSIL_Lab.pdb

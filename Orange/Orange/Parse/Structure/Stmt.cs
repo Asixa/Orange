@@ -1,28 +1,28 @@
 ﻿using System.Reflection.Emit;
-using Orange.Parse.New.Statements;
-using Orange.Parse.Standard1._0.Statements;
 using Orange.Parse.Statements;
-using Orange.Tokenize;
+using Orange.Parse.Structure;
+using static Tag;
 
 namespace Orange.Parse
 {
     public class Stmt : Node
     {
-        public static Stmt Null = new Stmt();
+        protected static readonly Stmt Null = new Stmt();
         public static Stmt Enclosing = Null;
         public virtual void Create(ILGenerator generator) { }
-        public static Stmt Match()
+
+        protected static Stmt Match()
         {
-            switch (_look.TagValue)
+            switch (_look.tag_value)
             {
                 case ';':
                     Move();
                     return Null;
                 case '{':
                     return Block.Match();
-                case Tag.LET:
+                case LET:
                     return Let.Match();
-                case Tag.DEF:
+                case DEF:
                     return Variable.Defination();
                 default:
                     return FuncCall.Match();
@@ -32,15 +32,15 @@ namespace Orange.Parse
 
     public class Stmts : Stmt
     {
-        public Stmt stmt1, stmt2;
+        private readonly Stmt stmt1,stmt2;
 
-        public Stmts(Stmt s1, Stmt s2)
+        private Stmts(Stmt s1, Stmt s2)
         {
             stmt1 = s1;
             stmt2 = s2;
         }
 
-        public new static Stmt Match() => _look.TagValue == '}' ? Null : new Stmts(Stmt.Match(), Match());
+        public new static Stmt Match() => _look.tag_value == '}' ? Null : new Stmts(Stmt.Match(), Match());
 
         public override void Create(ILGenerator generator)
         {
