@@ -82,7 +82,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Parse\Structure\Stmt.cs" />
     <Compile Include="Parse\Core\Type.cs" />
-    <Compile Include="Tokenize\Token.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
