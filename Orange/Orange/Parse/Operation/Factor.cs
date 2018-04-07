@@ -1,42 +1,41 @@
-﻿using Orange.Debug;
+﻿using Orange.Generate;
+using Orange.Parse.Structure;
 using Orange.Tokenize;
+using static Tag;
 using Type = Orange.Parse.Core.Type;
-
+using static Orange.Debug.Debugger;
 namespace Orange.Parse.Operation
 {
     public class Factor:LogicNode
     {
-        private Factor(Token tok, Type type) : base(tok, type){}
-        public Factor(int i) : base(new Int(i), Type.Int){ }
-
+        public Factor(Token tok, Type type) : base(tok, type){}
         private static readonly Factor
-            True = new Factor(Word.True, Type.Bool),False = new Factor(Word.False, Type.Bool);
+            True = new Factor(Word.True, Type.Bool),
+            False = new Factor(Word.False, Type.Bool);
+
+        public override void Generate(Method method)
+        {
+            method.AddCode(ISet.Push_value,Op);
+        }
 
         public static LogicNode Match()
         {
             LogicNode factor;
-            switch (_look.tag_value)
+            switch (Look.tag_value)
             {
-                case Tag.INT:factor=new Factor(_look,Type.Int);break;
-                case Tag.FLOAT:factor = new Factor(_look, Type.Float);break;
-                case Tag.TRUE:factor = True;break;
-                case Tag.FALSE: factor = False;break;
-                case Tag.STRING:factor = new Factor(_look,Type.String);break;
+                case INT:factor=new Factor(Look,Type.Int);break;
+                case FLOAT:factor = new Factor(Look, Type.Float);break;
+                case TRUE:factor = True;break;
+                case FALSE: factor = False;break;
+                case STRING:factor = new Factor(Look,Type.String);break;
                 case '(':
                     Move();
                     factor = BoolTree.Match();
                     Match(')');
                     return factor;
-                case Tag.ID:
-                    var tok = _look;
-                    var identitifer = Type.Match();
-                    var variable = Top.Get(_look);
-                    if (variable == null)
-                        Error(_look + Debugger.Errors.UnknownVariable);
-                    Move();
-                    return new Factor(tok, identitifer.Check());
+                case ID:return Phrase.Match();
                 default:
-                    Error(Debugger.Errors.GrammarError+" "+_look);
+                    Error(GrammarError);
                     return null;
             }
             Move();

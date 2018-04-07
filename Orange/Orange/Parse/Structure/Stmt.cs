@@ -1,4 +1,6 @@
-﻿using System.Reflection.Emit;
+﻿using System;
+using System.Reflection.Emit;
+using Orange.Generate;
 using Orange.Parse.Statements;
 using Orange.Parse.Structure;
 using static Tag;
@@ -9,11 +11,11 @@ namespace Orange.Parse
     {
         protected static readonly Stmt Null = new Stmt();
         public static Stmt Enclosing = Null;
-        public virtual void Create(ILGenerator generator) { }
+        public virtual void Generate(Method generator) { }
 
         protected static Stmt Match()
         {
-            switch (_look.tag_value)
+            switch (Look.tag_value)
             {
                 case ';':
                     Move();
@@ -23,9 +25,11 @@ namespace Orange.Parse
                 case LET:
                     return Let.Match();
                 case DEF:
-                    return Variable.Defination();
+                    return Def.Defination();
                 default:
-                    return FuncCall.Match();
+                {
+                        return FuncCall.Match();
+                }
             }
         }
     }
@@ -40,12 +44,12 @@ namespace Orange.Parse
             stmt2 = s2;
         }
 
-        public new static Stmt Match() => _look.tag_value == '}' ? Null : new Stmts(Stmt.Match(), Match());
+        public new static Stmt Match() => Check('}') ? Null : new Stmts(Stmt.Match(), Match());
 
-        public override void Create(ILGenerator generator)
+        public override void Generate(Method generator)
         {
-            stmt1.Create(generator);
-            stmt2.Create(generator);
+            stmt1.Generate(generator);
+            stmt2.Generate(generator);
         }
     }
 }

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Language>
+  <Text tag="TypeError" content="类型错误:{0}" />
+  <Text tag="UnknownVariable" content="未知变量:{0}" />
+  <Text tag="GrammarError" content="语法错误" />
+  <Text tag="UnknownFunction" content="未知函数:{0}" />
+  <Text tag="UnknownField" content="未知属性:{0}" />
+  <Text tag="UnkownType" content="未知类型:{0}" />
+  <Text tag="ImpossibleError" content="这是个蜜汁报错" />
+
+  <Text tag="ShouldBe" content="&quot;{0}&quot; 应为 &quot;{1}&quot;" />
+  <Text tag="Error" content="错误" />
+  <Text tag="Line" content="行" />
+</Language>

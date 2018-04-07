@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using Orange.Parse;
+using OpCode = Orange.Generate.OpCode;
 
 namespace Orange.Compile
 {
@@ -17,7 +18,7 @@ namespace Orange.Compile
 
         public static AssemblyBuilder assembly;                                     //生成的程序集
         public static ModuleBuilder module;                                         //module
-
+        
         public static void Init()
         {
             assembly = AppDomain.CurrentDomain.DefineDynamicAssembly(
@@ -32,7 +33,7 @@ namespace Orange.Compile
         {
             foreach (var snippet in Parser.Snippets)
             foreach (var name_space in snippet.namespace_define)
-                name_space.Create();                                                //遍历所有声明的命名空间结构，生成IL
+                name_space.Generate();                                                //遍历所有声明的命名空间结构，生成IL
             assembly.Save(Setting.assembly_name + ".exe");                           //将程序集保存
         }
     }

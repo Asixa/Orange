@@ -1,21 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using Orange.Tokenize;
-
+using static Orange.Debug.Debugger;
+using static Tag;
 namespace Orange.Parse.Structure
 {
     public class Quote:Stmt
     {
-        public string name;
-        public static List<string> avaliable_namespaces = new List<string>();
-        public Quote(string name)
+        public readonly string name;
+        private static readonly List<string> AvaliableNamespaces = new List<string>();
+
+        private Quote(string name)
         {
             this.name = name;
-            if(!avaliable_namespaces.Contains(name))Debug.Debugger.Error("未知的命名空间");
+            if(!AvaliableNamespaces.Contains(name))Error("未知的命名空间");
         }
 
         public static void GetAllAvaliableNameSpace()
         {
+            //FIX ME 
             foreach (var dll in Compile.Compiler.Dlls)
             {
                 foreach (var type in Assembly.LoadFile(dll).GetTypes())
@@ -24,15 +26,15 @@ namespace Orange.Parse.Structure
                     if (levels.Count <= 0) continue;
                     foreach (var item in levels)
                     {
-                        if(!avaliable_namespaces.Contains(item))
-                        avaliable_namespaces.Add(item);
+                        if(!AvaliableNamespaces.Contains(item))
+                        AvaliableNamespaces.Add(item);
                     }
                 }
             }
         }
-        private static List<string> GetNameSpaceLevels(string nameSpace)
+        private static List<string> GetNameSpaceLevels(string name_space)
         {
-            var str_copy = nameSpace;
+            var str_copy = name_space;
             var list = new List<string>();
             if (str_copy == null)return list;
             while (true)
@@ -43,30 +45,33 @@ namespace Orange.Parse.Structure
                 list.Insert(0, current_space);
                 str_copy = current_space;
             }
-            list.Add(nameSpace);
+            list.Add(name_space);
             return list;
         }
+
+
         public new static void Match()
         {
-            Match(Tag.IMPORT);
+            Match(IMPORT);
             Match('<');
-            snippet.include.Add(new Quote(MatchSingleNamespace()));
-            while (_look.tag_value==',')
+            Snippet.include.Add(new Quote(MatchSingleNamespace()));
+            while (Look.tag_value==',')
             {
                 Match(',');
-                snippet.include.Add(new Quote(MatchSingleNamespace()));
+                Snippet.include.Add(new Quote(MatchSingleNamespace()));
             }
             Match('>');
         }
-        public static string MatchSingleNamespace()
+
+        private static string MatchSingleNamespace()
         {
-            var _namespace = _look.ToString();
-            Match(Tag.ID);
-            while (_look.tag_value == '.')
+            var _namespace = Look.ToString();
+            Match(ID);
+            while (Check('.'))
             {
                 Move();
-                _namespace += "." + _look;
-                Match(Tag.ID);
+                _namespace += "." + Look;
+                Match(ID);
             }
             return _namespace;
         }

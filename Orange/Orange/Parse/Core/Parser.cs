@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Orange.Parse.Core;
+using Orange.Parse.Operation;
 using Orange.Parse.Structure;
 using Orange.Tokenize;
 using static Tag;
@@ -22,18 +23,33 @@ namespace Orange.Parse
         {
             current = this;
             top = null;
-             used = 0;
-             lexer = lex;
+            used = 0;
+            lexer = lex;
             Node.Move();
         }
 
-        public void Analyze()
+        public Parser Analyze()
         {
+            //var a =BoolTree.Match();
+            //Console.WriteLine(a);
+            //a.Serialize();
+            //Console.WriteLine("完成");
+            //Console.ReadLine();
+
+
             snippet =new Snippet();
-            Quote.Match();
-            snippet.GetAllType();
-            while (look.tag_value==NAMESPACE)snippet.namespace_define.Add(NameSpace.Match());
+            //Quote.Match();
+            //snippet.GetAllType();
+            while (look.tag_value==NAMESPACE)snippet.namespace_define.Add(Namespace.Match());
             Snippets.Add(snippet);
+            return this;
+        }
+
+        public void Check()
+        {
+            foreach (var snippet in Snippets)
+            foreach (var name_space in snippet.namespace_define)
+                name_space.Generate();
         }
     }
 }

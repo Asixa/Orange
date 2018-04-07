@@ -9,7 +9,7 @@ namespace Orange.Parse.Core
         public readonly List<Quote> include = new List<Quote>();                             //此片段引用的命名空间
         public readonly List<string> types = new List<string>();
         public readonly List<List<string>> types_namespace = new List<List<string>>();       //保存每个type所属的命名空间
-        public readonly List<NameSpace>namespace_define=new List<NameSpace>();               //所有匹配到的命名空间结构
+        public readonly List<Namespace>namespace_define=new List<Namespace>();               //所有匹配到的命名空间结构
 
         public void GetAllType()
         {

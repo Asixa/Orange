@@ -4,6 +4,9 @@ using System.IO;
 using System.Text;
 using Orange.Debug;
 using Type = Orange.Parse.Core.Type;
+using static Orange.Debug.Debugger;
+using static Tag;
+
 // ReSharper disable InconsistentNaming
 namespace Orange.Tokenize
 {
@@ -12,18 +15,17 @@ namespace Orange.Tokenize
         private readonly StreamReader reader;
         private char peek = ' ';
         private bool EofReached { get; set; }
-        public static int line = 1;
+        public static int line = 1,ch=1;
         private readonly Dictionary<string, Word> key_words = new Dictionary<string, Word>();
-
+        public static string[] linesOfFile;
         private void Reserve(Word word)=>key_words.Add(word.lexeme, word);
         
-        public Lexer(StreamReader reader)
+        public Lexer(string path)
         {
-            this.reader = reader;
+            linesOfFile = File.ReadAllLines(path);
+            reader = new StreamReader(path);
             Reserve();
         }
-
-        private static void Error(string msg) => Debugger.Error(Debugger.Errors.Error+Debugger.Errors.Line+ ": " + msg);
 
         private void ReadChar()
         {
@@ -35,10 +37,11 @@ namespace Orange.Tokenize
                     return;
                 }
                 peek = (char) reader.Read();
+                ch++;
             }
             catch (Exception e)
             {
-                Debugger.Message(e.Message,ConsoleColor.Blue);
+                Message(e.Message,ConsoleColor.Blue);
             }
         }
 
@@ -53,7 +56,7 @@ namespace Orange.Tokenize
 
         public Token Scan()
         {
-            //去除空白
+            //remove spaces
             for (; !EofReached; ReadChar())
             {
                 if (peek == ' ' || peek == '\t'){}
@@ -61,12 +64,13 @@ namespace Orange.Tokenize
                 {
                     ReadChar();
                     ++line;
+                    ch = 0;
                 }
                 else break;
             }
             if (EofReached) return null;
 
-            //检测注释
+            //remove comments
             if (peek == '/') 
             {
                 ReadChar();
@@ -80,6 +84,7 @@ namespace Orange.Tokenize
                             {
                                 case '\r':
                                     line++;
+                                    ch = 0;
                                     ReadChar();
                                     break;
                                 case '*':
@@ -98,21 +103,15 @@ namespace Orange.Tokenize
                 return new Token('/');
             }
 
-            //操作符
+            //Operators
             switch (peek)
             {
-                case '&':
-                    return ReadChar('&') ? Word.And : new Token('&');
-                case '|':
-                    return ReadChar('|') ? Word.Or : new Token('|');
-                case '=':
-                    return ReadChar('=') ? Word.Equal : new Token('=');
-                case '!':
-                    return ReadChar('=') ? Word.NotEqual : new Token('!');
-                case '<':
-                    return ReadChar('=') ? Word.Less : new Token('<');
-                case '>':
-                    return ReadChar('=') ? Word.Greater : new Token('>');
+                case '&':return ReadChar('&') ? Word.And : new Token('&');
+                case '|':return ReadChar('|') ? Word.Or : new Token('|');
+                case '=':return ReadChar('=') ? Word.Equal : new Token('=');
+                case '!':return ReadChar('=') ? Word.NotEqual : new Token('!');
+                case '<':return ReadChar('=') ? Word.Less : new Token('<');
+                case '>':return ReadChar('=') ? Word.Greater : new Token('>');
                 case '"':
                     var s = "";
                     ReadChar();
@@ -136,7 +135,7 @@ namespace Orange.Tokenize
                     }
             }
 
-            //分析数字
+            //Digits
             if (char.IsDigit(peek))
             {
                 var val = 0;
@@ -153,7 +152,7 @@ namespace Orange.Tokenize
                 return new Float(float_val);
             }
 
-            //分析标识符
+            //Identifiers
             if (char.IsLetter(peek))
             {
                 var b = new StringBuilder();
@@ -165,10 +164,10 @@ namespace Orange.Tokenize
 
                 var s = b.ToString();
                 if (key_words.ContainsKey(s)) return key_words[s];
-                return key_words[s] = new Word(s, Tag.ID);
+                return key_words[s] = new Word(s, ID);
             }
-            
-            //其他符合
+
+            //other symbols
             var tok = new Token(peek);
             if (!EofReached) peek = ' ';
             return tok;
@@ -176,20 +175,20 @@ namespace Orange.Tokenize
 
         private void Reserve()
         {
-            Reserve(new Word("if", Tag.IF));
-            Reserve(new Word("else", Tag.ELSE));
-            Reserve(new Word("while", Tag.WHILE));
-            Reserve(new Word("do", Tag.DO));
-            Reserve(new Word("break", Tag.BREAK));
-            Reserve(new Word("print", Tag.PRINT));
-            Reserve(new Word("public",Tag.PUBLIC));
-            Reserve(new Word("private", Tag.PRIVATE));
-            Reserve(new Word("obj",Tag.OBJ));
-            Reserve(new Word("func",Tag.FUNC));
-            Reserve(new Word("let",Tag.LET));
-            Reserve(new Word("def",Tag.DEF));
-            Reserve(new Word("import",Tag.IMPORT));
-            Reserve(new Word("namespace",Tag.NAMESPACE));
+            Reserve(new Word("if", IF));
+            Reserve(new Word("else", ELSE));
+            Reserve(new Word("while", WHILE));
+            Reserve(new Word("do", DO));
+            Reserve(new Word("break", BREAK));
+            Reserve(new Word("print", PRINT));
+            Reserve(new Word("public",PUBLIC));
+            Reserve(new Word("private", PRIVATE));
+            Reserve(new Word("obj",OBJ));
+            Reserve(new Word("func",FUNC));
+            Reserve(new Word("let",LET));
+            Reserve(new Word("def",DEF));
+            Reserve(new Word("import",IMPORT));
+            Reserve(new Word("namespace",NAMESPACE));
             Reserve(Word.True);
             Reserve(Word.False);
             Reserve(Type.Int);
@@ -213,7 +212,7 @@ namespace Orange.Tokenize
     public class Int : Token
     {
         private readonly int value;
-        public Int(int val) : base(Tag.INT)
+        public Int(int val) : base(INT)
         {
             value = val;
         }
@@ -230,22 +229,22 @@ namespace Orange.Tokenize
         public override string ToString() => lexeme;
 
         public static readonly Word
-            And = new Word("&&", Tag.AND),
-            Or = new Word("||", Tag.OR),
-            Equal = new Word("==", Tag.EQ),
-            NotEqual = new Word("!=", Tag.NE),
-            Less = new Word("<=", Tag.LE),
-            Greater = new Word(">=", Tag.GE),
-            Minus = new Word("-", Tag.MINUS),
-            True = new Word("true", Tag.TRUE),
-            False = new Word("false", Tag.FALSE),
-            Not = new Word("!", Tag.NOT);
+            And = new Word("&&", AND),
+            Or = new Word("||", OR),
+            Equal = new Word("==", EQ),
+            NotEqual = new Word("!=", NE),
+            Less = new Word("<=", LE),
+            Greater = new Word(">=", GE),
+            Minus = new Word("-", MINUS),
+            True = new Word("true", TRUE),
+            False = new Word("false", FALSE),
+            Not = new Word("!", NOT);
     }
 
     public class Float : Token
     {
         private readonly float value;
-        public Float(float val) : base(Tag.FLOAT)
+        public Float(float val) : base(FLOAT)
         {
             value = val;
         }
@@ -255,7 +254,7 @@ namespace Orange.Tokenize
     public class String : Token
     {
         private readonly string value;
-        public String(string val) : base(Tag.STRING)
+        public String(string val) : base(STRING)
         {
             value = val;
         }
@@ -297,4 +296,44 @@ public static class Tag
         DEF = (char) 284,
         IMPORT = (char) 285,
         NAMESPACE = (char) 286;
+
+    public static string Get(char tag)
+    {
+        switch (tag)
+        {
+            case AND:
+                return "&";
+            case BASIC: return "basic";
+            case BREAK: return "break";
+            case DO: return "do";
+            case ELSE: return "else";
+            case EQ: return "==";
+            case FALSE: return "false";
+            case GE: return ">=";
+            case ID: return "ID";
+            case IF: return "if";
+            case INDEX: return "index";
+            case LE: return "<=";
+            case MINUS: return "-";
+            case NE: return "!=";
+            case INT: return "int";
+            case OR: return "||";
+            case FLOAT: return "float";
+            case TEMP: return "temp";
+            case TRUE: return "true";
+            case WHILE: return "while";
+            case PRINT: return "print";
+            case STRING: return "string";
+            case PUBLIC: return "public";
+            case PRIVATE: return "private";
+            case OBJ: return "obj";
+            case FUNC: return "func";
+            case NOT: return "!";
+            case LET: return "let";
+            case DEF: return "def";
+            case IMPORT: return "import";
+            case NAMESPACE: return "namespace";
+                default: return "ERROR";
+        }
+    }
 }

@@ -1,25 +1,28 @@
 ﻿using Orange.Debug;
 using Orange.Parse.Core;
 using Orange.Tokenize;
-
+using static Orange.Debug.Debugger;
 namespace Orange.Parse.Structure
 {
     public class Node
     {
-        readonly int _lexLine;
+        public readonly int lex_line,lex_ch;
 
-        public Node()=>_lexLine = Lexer.line; 
-        //public void Error(string msg) => Debug.Debugger.Error("[ERROR] line " + _lexLine + ": " + msg);
-
-        public static Token _look => Parser.current.look;
-        public static void Move() => Parser.current.look = Parser.current.lexer.Scan();
-        public static void Match(int tag)
+        protected Node()
         {
-            if (_look.tag_value == tag) Move();
-            else Error(Debugger.Errors.GrammarError +": "+ _look + " "+Debugger.Errors.ShouldBe+" " + (char)tag);
+            lex_line = Lexer.line;
+            lex_ch = Lexer.ch;
         }
-        public static Env Top => Parser.current.top;
-        public static Snippet snippet => Parser.current.snippet;
-        public static void Error(string msg) => Debugger.Error(Debugger.Errors.Error+Debugger.Errors.Line + Lexer.line + ": " + msg);
+
+        public static Token Look => Parser.current.look;
+        public static bool Check(char tag) => Look.tag_value == tag;
+        public static void Move() => Parser.current.look = Parser.current.lexer.Scan();
+        public static void Match(char tag)
+        {
+            if (Check(tag)) Move();
+            else Error(ShouldBe,Lexer.line,Lexer.ch,Look,tag);
+        }
+        protected static Env Top => Parser.current.top;
+        protected static Snippet Snippet => Parser.current.snippet;
     }
 }

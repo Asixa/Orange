@@ -49,6 +49,13 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -59,18 +66,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Generate\BinaryManager.cs" />
+    <Compile Include="Generate\Generator.cs" />
     <Compile Include="Compile\Compiler.cs" />
     <Compile Include="Debug\Debugger.cs" />
+    <Compile Include="Interprete\Interpreter.cs" />
+    <Compile Include="Parse\Operation\Phrase.cs" />
     <Compile Include="Parse\Statements\Let.cs" />
     <Compile Include="Parse\Operation\BoolTree.cs" />
     <Compile Include="Parse\Operation\LogicNode.cs" />
     <Compile Include="Parse\Operation\Factor.cs" />
     <Compile Include="Parse\Operation\MathTree.cs" />
     <Compile Include="Parse\Operation\Unary.cs" />
-    <Compile Include="Parse\Statements\Variable.cs" />
+    <Compile Include="Parse\Statements\Def.cs" />
     <Compile Include="Parse\Structure\NameSpace.cs" />
-    <Compile Include="Parse\Structure\Obj.cs" />
-    <Compile Include="Parse\Structure\Func.cs" />
+    <Compile Include="Parse\Structure\Class.cs" />
+    <Compile Include="Parse\Structure\Method.cs" />
     <Compile Include="Parse\Structure\Quote.cs" />
     <Compile Include="Parse\Core\Snippet.cs" />
     <Compile Include="Parse\Structure\Block.cs" />
@@ -89,7 +100,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Debug\Localization\Chinese.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

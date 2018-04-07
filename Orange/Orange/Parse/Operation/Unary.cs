@@ -1,22 +1,29 @@
 ﻿using Orange.Debug;
 using Orange.Parse.Core;
 using Orange.Tokenize;
-
+using static Orange.Debug.Debugger;
 namespace Orange.Parse.Operation
 {
     public class Unary:LogicNode
     {
         private LogicNode Expr { get; }
 
-        private Unary(Token tok, LogicNode expr) : base(tok, Type.Max(Type.Int, expr.Type))
+        private Unary(Token tok, LogicNode expr) : base(tok, null)
         {
-            if (Type == null)Error(Debugger.Errors.TypeError);
             Expr = expr;
         }
+
+        public override Type Check()
+        {
+           type=Type.Max(Type.Int, Expr.type);
+           if (type == null) Error(TypeError, lex_line, lex_ch, "");
+           return type;
+        }
+
         public override string ToString() => Op+ " " + Expr;
         public static LogicNode Match()
         {
-            switch (_look.tag_value)
+            switch (Look.tag_value)
             {
                 case '-':
                     Move();
