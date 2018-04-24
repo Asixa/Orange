@@ -8,14 +8,34 @@ namespace Orange.Parse.Operation
 {
     public class Factor:LogicNode
     {
+        private bool isval;
         public Factor(Token tok, Type type) : base(tok, type){}
         private static readonly Factor
             True = new Factor(Word.True, Type.Bool),
             False = new Factor(Word.False, Type.Bool);
 
+        public override Type Check(Method method)
+        {
+            if (type != null) return type;
+            isval = true;//local
+            foreach (var local in method.locals)if (local.name == Op.ToString()) return local.type;
+            foreach (var local in method.@class.public_field)if (local.name == Op.ToString()) return local.type;
+            Error(UnknownField,lex_line,lex_ch,Op.ToString());
+            return null;
+        }
+
         public override void Generate(Method method)
         {
-            method.AddCode(ISet.Push_value,Op);
+            if (isval)
+            {
+                var index = method.GetVar(Op.ToString(), out var attribute);
+                method.AddCode(attribute==1 ? ISet.Push_local : ISet.Push_field, index);
+            }
+            else
+            {
+                method.AddCode(ISet.Push_value , Op);
+            }
+           
         }
 
         public static LogicNode Match()

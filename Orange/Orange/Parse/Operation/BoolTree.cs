@@ -28,9 +28,9 @@ namespace Orange.Parse.Operation
             if (Op.tag_value == NE || Op.tag_value == LE || Op.tag_value == GE)
                 method.AddCode(ISet.Negate);
         }
-        public override Type Check()
+        public override Type Check(Method method)
         {
-            type = Check(left.Check(), right.Check());
+            type = Check(left.Check(method), right.Check(method));
             if (type == null) Error(TypeError, lex_line, lex_ch, "");
             return type;
         }

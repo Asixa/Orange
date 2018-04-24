@@ -30,10 +30,13 @@ namespace Orange.Parse.Statements
 
         public override void Generate(Method generator)
         {
-            value.Check();
+            value.Check(generator);
             value.Generate(generator);
-            
-
+            var morpheme = Phrase.GetEnd(target);
+            Phrase.DoubleCheck(morpheme, MorphemeAttribute.Object);
+            var index = generator.GetVar(morpheme.name,out var attribute);
+            if(index==-1)Error(UnknownVariable,lex_line,lex_ch,morpheme.name);
+            generator.AddCode(attribute==1?ISet.Storeloc:ISet.StoreField,index);
         }
     }
 }

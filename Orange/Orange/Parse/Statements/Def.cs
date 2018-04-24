@@ -1,10 +1,11 @@
-﻿using System.Reflection.Emit;
+﻿using System;
+using System.Reflection.Emit;
 using Orange.Generate;
-using Orange.Parse.Core;
 using Orange.Parse.Operation;
 using Orange.Parse.Structure;
 using Orange.Tokenize;
 using static Tag;
+using Type = Orange.Parse.Core.Type;
 
 namespace Orange.Parse.Statements
 {
@@ -12,7 +13,7 @@ namespace Orange.Parse.Statements
     {
         public string name;
         public LogicNode MatchType;
-        public Core.Type type;
+        public Type type;
 
         public LocalBuilder builder;
 
@@ -23,7 +24,7 @@ namespace Orange.Parse.Statements
             MatchType = match;
         }
 
-        public static Stmt Defination()
+        public static Stmt Match()
         {
             Match(DEF);
             var match = Type.Match();
@@ -31,14 +32,21 @@ namespace Orange.Parse.Statements
             Match(ID);
             Match(';');
             var id = new Def(tok.ToString(), null,match);
-        //    Top.AddIdentifier(tok, id);
-            //Parser.current.used += match.width;
             return id;
         }
 
         public override void Generate(Method generator)
         {
-           
+            var morpheme =Phrase.GetEnd(MatchType);
+            Phrase.DoubleCheck(morpheme, MorphemeAttribute.Class);
+            generator.locals.Add(new Variable(morpheme.type,name));
+        }
+
+        public void Generate(Class generator)
+        {
+            var morpheme = Phrase.GetEnd(MatchType);
+            Phrase.DoubleCheck(morpheme, MorphemeAttribute.Class);
+            generator.public_field.Add(new Variable(morpheme.type, name));
         }
     }
 }

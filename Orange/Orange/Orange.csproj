@@ -71,7 +71,11 @@
     <Compile Include="Compile\Compiler.cs" />
     <Compile Include="Debug\Debugger.cs" />
     <Compile Include="Interprete\Interpreter.cs" />
+    <Compile Include="Interprete\Runtime\RTClass.cs" />
+    <Compile Include="Interprete\Runtime\RTMethod.cs" />
+    <Compile Include="Interprete\Runtime\RTNamespace.cs" />
     <Compile Include="Parse\Operation\Phrase.cs" />
+    <Compile Include="Parse\Statements\DotNet.cs" />
     <Compile Include="Parse\Statements\Let.cs" />
     <Compile Include="Parse\Operation\BoolTree.cs" />
     <Compile Include="Parse\Operation\LogicNode.cs" />

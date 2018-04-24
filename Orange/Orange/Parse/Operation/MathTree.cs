@@ -13,9 +13,9 @@ namespace Orange.Parse.Operation
             left = lhs;
             right = rhs;
         }
-        public override Type Check()
+        public override Type Check(Method method)
         {
-            type = Type.Max(left.Check(), right.Check());
+            type = Type.Max(left.Check(method), right.Check(method));
             if (type == null) Error(TypeError, lex_line, lex_ch, "");
             return type;
         }

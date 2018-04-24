@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Reflection.Emit;
-using Orange.Compile;
-using Orange.Generate;
-using Orange.Parse.Core;
+﻿using System.Collections.Generic;
 using Orange.Parse.Operation;
+using Orange.Parse.Statements;
 using static Orange.Generate.Generator;
 using static Tag;
 
@@ -13,9 +8,15 @@ namespace Orange.Parse.Structure
 {
     public class Class:Stmt
     {
-        public ElementAtttibute atttibute;
         public string name;
+        public ElementAtttibute atttibute;
+       
+        public readonly List<Def> defs = new List<Def>();
+        public List<Variable> public_field=new List<Variable>();
+
+        public  Method current_method;
         public readonly List<Method> methods=new List<Method>();
+
         public static Class Match(Namespace name_space)
         {
             var @class=new Class();
@@ -26,7 +27,7 @@ namespace Orange.Parse.Structure
             while (Check(DEF) || Check(FUNC))
             {
                 while (Check(FUNC)) @class.methods.Add(Method.Match(@class));
-                while (Check(DEF)) @class.methods.Add(Method.Match(@class));
+                while (Check(DEF)) @class.defs.Add(Def.Match()as Def);
             }
 
             Match('}');
@@ -37,6 +38,7 @@ namespace Orange.Parse.Structure
         {
             name = name_space.name + "." + name;
             @this = new Morpheme(name, MorphemeAttribute.Class, this, null, new Core.Type(name, Tag.BASIC, 2));
+            foreach (var def in defs)def.Generate(this);
             foreach (var method in methods)method.Generate(this);
         }
 
@@ -48,16 +50,19 @@ namespace Orange.Parse.Structure
             foreach (var method in methods) method.Serialize();
         }
 
-        public static Class Deserialize()
+
+    }
+
+    public class Variable:Stmt
+    {
+        public Core.Type type;
+        //public LogicNode type_match;
+        public string name;
+        public Variable(Core.Type type,string name)
         {
-            var @class = new Class
-            {
-                name = binary_reader.ReadString(),
-                atttibute = (ElementAtttibute) binary_reader.ReadInt32()
-            };
-            for (var i = 0; i < binary_reader.ReadInt32(); i++)
-            @class.methods.Add(Method.Deserialize());
-            return @class;
+            this.type = type;
+            //this.type_match = type_match;
+            this.name = name;
         }
     }
 }

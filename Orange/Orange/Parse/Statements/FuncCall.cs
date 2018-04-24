@@ -25,7 +25,8 @@ namespace Orange.Parse.Statements
 
         public override void Generate(Method generator)
         {
-            match.Check();
+            match.Check(generator);
+            match.Generate(generator);
         }
     }
 }

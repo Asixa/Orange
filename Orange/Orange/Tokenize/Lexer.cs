@@ -189,6 +189,7 @@ namespace Orange.Tokenize
             Reserve(new Word("def",DEF));
             Reserve(new Word("import",IMPORT));
             Reserve(new Word("namespace",NAMESPACE));
+            Reserve(new Word("dotNet",DOTNET));
             Reserve(Word.True);
             Reserve(Word.False);
             Reserve(Type.Int);
@@ -253,7 +254,7 @@ namespace Orange.Tokenize
 
     public class String : Token
     {
-        private readonly string value;
+        public readonly string value;
         public String(string val) : base(STRING)
         {
             value = val;
@@ -295,7 +296,8 @@ public static class Tag
         LET = (char) 283,
         DEF = (char) 284,
         IMPORT = (char) 285,
-        NAMESPACE = (char) 286;
+        NAMESPACE = (char) 286,
+        DOTNET=(char)287;
 
     public static string Get(char tag)
     {

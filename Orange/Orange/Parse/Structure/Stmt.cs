@@ -25,7 +25,9 @@ namespace Orange.Parse
                 case LET:
                     return Let.Match();
                 case DEF:
-                    return Def.Defination();
+                    return Def.Match();
+                case DOTNET:
+                    return DotNet.Match();
                 default:
                 {
                         return FuncCall.Match();

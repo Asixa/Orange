@@ -59,6 +59,8 @@ namespace Orange.Debug
             UnkownType = "UnkownType",
             ImpossibleError = "ImpossibleError",
             ShouldBe = "ShouldBe",
+            ConvertError ="ConverError",
+            ParamCountError = "ParamCountError",
             Errors = "Error",
             Line = "Line";
 

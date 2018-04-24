@@ -7,6 +7,8 @@
   <Text tag="UnknownField" content="未知属性:{0}" />
   <Text tag="UnkownType" content="未知类型:{0}" />
   <Text tag="ImpossibleError" content="这是个蜜汁报错" />
+  <Text tag="ConverError" content="无法将 {0} 隐式转换为 {1}" />
+  <Text tag="ParamCountError" content=" 函数{0}需要 {1} 个参数" />
 
   <Text tag="ShouldBe" content="&quot;{0}&quot; 应为 &quot;{1}&quot;" />
   <Text tag="Error" content="错误" />

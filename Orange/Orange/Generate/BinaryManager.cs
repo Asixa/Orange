@@ -9,27 +9,18 @@ namespace Orange.Generate
 {
     class BinaryManager
     {
-        public void Write()
+        public static void Write()
         {
             var binary_writer=new BinaryWriter(new FileStream("mydata.ore",FileMode.Create));
-            binary_writer.Write(666);
-            binary_writer.Write(2.2333f);
-            binary_writer.Write(true);
-            binary_writer.Write(false);
-            binary_writer.Write(true);
-            binary_writer.Write("HelloWorld");
+            binary_writer.Write((int)Generator.ElementAtttibute.STATIC);
             binary_writer.Close();
         }
 
-        public void Read()
+        public static void Read()
         {
            var binary_reader = new BinaryReader(new FileStream("mydata.ore",FileMode.Open));
-            Console.WriteLine(binary_reader.ReadInt32());
-            Console.WriteLine(binary_reader.ReadSingle());
-            Console.WriteLine(binary_reader.ReadBoolean());
-            Console.WriteLine(binary_reader.ReadBoolean());
-            Console.WriteLine(binary_reader.ReadBoolean());
-            Console.WriteLine(binary_reader.ReadString());
+            Console.WriteLine((Generator.ElementAtttibute)binary_reader.ReadInt32());
+ 
             binary_reader.Close();
         }
     }

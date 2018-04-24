@@ -19,21 +19,25 @@ public enum ISet
     Divide,
     Call,
     Push_value,
+    Push_local,
+    Push_field,
     Equal,
     Less,
     Greater,
     Negate,
     Or,
-    And
+    And,
+    Storeloc,
+    StoreField
 }
 namespace Orange.Generate
 {
     
     public static class Generator
     {
+
         public static readonly List<Namespace>name_spaces=new List<Namespace>();
         public static BinaryWriter binary_writer;
-        public static BinaryReader binary_reader;
         public static Morpheme @this;
         public static void Serialize()
         {
@@ -43,30 +47,30 @@ namespace Orange.Generate
             binary_writer.Close();
         }
 
-        public static void Deserialize()
+
+
+        [Flags]
+        public enum ElementAtttibute
         {
-            binary_reader=new BinaryReader(new FileStream("a.ore", FileMode.Open));
-            for (var i = 0; i < name_spaces.Count; i++)name_spaces.Add(Namespace.Deserialize());
-            binary_reader.Close();
+            STATIC = 1,
+            PUBLIC = 2,
+            PRIVATE = 4
+        }
+
+        public class OpCode
+        {
+            public OpCode(ISet op, object val)
+            {
+                opcode = op;
+                value = val;
+            }
+
+            public readonly ISet opcode;
+            public readonly object value;
+            public override string ToString() => opcode + " " + value;
         }
     }
 
-    [Flags]
-    public enum ElementAtttibute
-    {
-        STATIC=1,
-        PUBLIC =2,
-        PRIVATE =4
-    }
-    public class OpCode
-    {
-        public OpCode(ISet op, object val)
-        {
-            opcode = op;
-            value = val;
-        }
-        public readonly ISet opcode;
-        public readonly object value;
-        public override string ToString()=>opcode+" "+value;
-    }
+
+
 }

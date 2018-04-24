@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using Orange.Parse;
-using OpCode = Orange.Generate.OpCode;
 
 namespace Orange.Compile
 {

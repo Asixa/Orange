@@ -1,0 +1,7 @@
+E:\Programing\C#\CompilerPrinciple\Orange\Orange\MSIL\bin\Debug\MSIL.exe.config
+E:\Programing\C#\CompilerPrinciple\Orange\Orange\MSIL\bin\Debug\MSIL.exe
+E:\Programing\C#\CompilerPrinciple\Orange\Orange\MSIL\bin\Debug\MSIL.pdb
+E:\Programing\C#\CompilerPrinciple\Orange\Orange\MSIL\obj\Debug\MSIL.csprojResolveAssemblyReference.cache
+E:\Programing\C#\CompilerPrinciple\Orange\Orange\MSIL\obj\Debug\MSIL.csproj.CoreCompileInputs.cache
+E:\Programing\C#\CompilerPrinciple\Orange\Orange\MSIL\obj\Debug\MSIL.exe
+E:\Programing\C#\CompilerPrinciple\Orange\Orange\MSIL\obj\Debug\MSIL.pdb

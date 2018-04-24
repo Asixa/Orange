@@ -20,7 +20,7 @@ namespace Orange.Parse.Operation
 
         public virtual void Generate(Method method){}
 
-        public virtual Type Check() {return type;}
+        public virtual Type Check(Method method) {return type;}
         public override string ToString() => Op.ToString();
 
         protected delegate LogicNode Rule();
@@ -32,9 +32,7 @@ namespace Orange.Parse.Operation
             {
                 var tok = Look;
                 Move();
-                return typeof(T) == typeof(Params)
-                    ? new Params(tok, expr, rule.Invoke())
-                    : typeof(T) == typeof(Phrase)
+                return typeof(T) ==typeof(Phrase)
                         ? new Phrase(tok, expr, rule.Invoke())
                         : typeof(T) == typeof(BoolTree)
                             ? new BoolTree(tok, expr, rule.Invoke())

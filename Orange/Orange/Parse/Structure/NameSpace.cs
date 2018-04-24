@@ -43,13 +43,5 @@ namespace Orange.Parse.Structure
             binary_writer.Write(classes.Count);
             foreach (var @class in classes) @class.Serialize();
         }
-
-        public static Namespace Deserialize()
-        {
-            var @namespace = new Namespace {name = binary_reader.ReadString()};
-            for (var i = 0; i < binary_reader.ReadInt32(); i++)
-            @namespace.classes.Add(Class.Deserialize());
-            return @namespace;
-        }
     }
 }

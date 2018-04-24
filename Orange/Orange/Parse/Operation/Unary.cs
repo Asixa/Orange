@@ -1,5 +1,6 @@
 ﻿using Orange.Debug;
 using Orange.Parse.Core;
+using Orange.Parse.Structure;
 using Orange.Tokenize;
 using static Orange.Debug.Debugger;
 namespace Orange.Parse.Operation
@@ -13,7 +14,7 @@ namespace Orange.Parse.Operation
             Expr = expr;
         }
 
-        public override Type Check()
+        public override Type Check(Method method)
         {
            type=Type.Max(Type.Int, Expr.type);
            if (type == null) Error(TypeError, lex_line, lex_ch, "");
